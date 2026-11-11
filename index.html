@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10121b">
+  <title>Little Box — Arena</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body data-page="game">
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">□</span> LITTLE BOX</a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-link active" href="index.html">Arena</a>
+      <a class="nav-link" href="shop.html">Shop &amp; index</a>
+    </nav>
+    <div class="top-actions">
+      <span id="saveStatus" class="save-status" aria-live="polite">Saved locally</span>
+      <button id="pauseButton" class="button button-small" type="button">Pause</button>
+    </div>
+  </header>
+
+  <main class="game-layout">
+    <section class="game-heading">
+      <p class="eyebrow">ZONE 01 · THE QUIET ROOM</p>
+      <h1>Stay inside. Stay alive.</h1>
+      <p>Dodge the attacks, fire back with X or click, and use the enemy waves to test your build.</p>
+    </section>
+
+    <section class="game-hud" aria-label="Game status">
+      <div class="hud-card"><span>WAVE</span><strong id="waveLabel">—</strong></div>
+      <div class="hud-card hud-health"><span>HEALTH</span><div class="meter"><i id="healthFill"></i></div><strong id="healthLabel">100 / 100</strong></div>
+      <div class="hud-card"><span>SURVIVED</span><strong id="timerLabel">0:00</strong></div>
+      <div class="hud-card hud-boss" id="bossHud" hidden><span>ORBITAL GUARDIAN</span><div class="meter boss-meter"><i id="bossFill"></i></div><strong id="bossLabel">2000 / 2000</strong></div>
+    </section>
+
+    <div class="arena-frame">
+      <canvas id="arena" width="800" height="800" aria-label="Dodge arena. Move with WASD or arrow keys, fire with X or click, and unlock Dash to use Space."></canvas>
+      <div class="arena-label"><span class="live-dot"></span><span id="arenaState">READY</span></div>
+      <div id="gameOverlay" class="game-overlay" aria-live="polite">
+        <div class="overlay-card">
+          <p id="overlayEyebrow" class="eyebrow">A SMALL BOX. A BIG PROBLEM.</p>
+          <h2 id="overlayTitle">Ready when you are.</h2>
+          <p id="overlayText">Dodge every attack. Enemies reward you when they leave the arena.</p>
+          <div id="overlayButtons" class="overlay-buttons"></div>
+        </div>
+      </div>
+      <div id="toast" class="toast" aria-live="polite"></div>
+    </div>
+
+    <section class="game-footer">
+      <div class="control-hint"><span class="key">W A S D</span><span class="key">↑ ↓ ← →</span> Move <span class="separator">·</span><span class="key">X / CLICK</span> Fire back</div>
+      <div class="control-hint"><span class="key">SPACE</span> Dash (unlock in shop)</div>
+      <div class="control-hint"><span class="key">Q</span> Slow <span class="key">E</span> Pulse <span class="key">R</span> Deflect <span class="key">F</span> Phase</div>
+      <a class="text-link" href="shop.html">Upgrades &amp; enemy guide <span aria-hidden="true">↗</span></a>
+    </section>
+
+    <details class="settings">
+      <summary>Sound settings</summary>
+      <div class="settings-row">
+        <label>Music <input id="musicVolume" type="range" min="0" max="100" value="35"></label>
+        <label>Effects <input id="soundVolume" type="range" min="0" max="100" value="55"></label>
+      </div>
+      <p>Original tones are generated in your browser. Sound starts after your first click.</p>
+    </details>
+  </main>
+  <footer class="site-footer">A tiny browser game. Progress is saved on this device.</footer>
+</body>
+</html>

@@ -1,0 +1,442 @@
+Ok I want you to make a game kind of like undertale but different. MAKe sure it is it's own page
+Do not use Python, Node.js, PHP, or any backend technology.
+You may create , but the final project must work as a website on GitHub Pages if I publish it
+Try to use only HTML
+CSS
+Java Script.
+
+By the way you should get currency when enemies leave the map you should get 1 currency of that type.
+
+Try to only use these concepts mainly Variables
+Conditions
+Loops
+Arrays
+Functions
+APIs
+Local Data Storage
+But if have to use other stuff just put a note and make sure to explain how that code works. For the entire project
+also try to use your tokens efficiently.
+I want a the border to be a cube that and is like 50% of the inner center of the page
+The thing moving and getting controlled should be a small circle
+
+Ok now their will be 2 pages 1 page is the game and the base screen and stuff and the other page is
+the shop.
+Make sure that the music gets more intense based of what wave you are in and calm if your in updrades menu.
+
+WHat updrades shop will have: 
+
+Make sure to add a way to pause and make it so if you leave the tab the game pauses
+
+
+
+Also add an index somewhere which you can search and catorize the enemies based off like how they attack
+and how hard they are and give a bar on size. Also give a tip and how the enemy works.
+
+
+
+What enemies, how waves and what will played and how will made:
+
+Ok waves are calculated like this: For every 
+
+ each zone will have 10 waves and a boss fight at the end. and if you win you can progress to the next zone
+
+
+
+Zone 1 info Zone 1 – Enemy Types, Waves, Scoring, and Upgrades
+1. Enemy Types
+Zone 1 should have 8 enemy types and 1 final boss.
+Enemy	Health	Speed	Attack	Difficulty
+Basic	50	Medium	Moves toward the base	Easy
+Runner	25	Very Fast	Rushes toward the base	Easy
+Tank	200	Slow	High health, absorbs damage	Hard
+Shooter	60	Medium	Shoots projectiles at the player	Medium
+Splitter	80	Medium	Splits into 2 smaller enemies when killed	Medium
+Exploder	70	Fast	Explodes when close to the player	Hard
+Shielded	120	Medium	Has a shield that reduces incoming damage	Hard
+Swarm	15	Very Fast	Spawns in groups of 5–8	Medium
+Zone 1 Boss: Guardian	2,000	Slow	Fires projectiles, summons enemies, and charges the player	Very Hard
+
+2. Zone 1 Wave System
+Each zone contains 10 waves, with a boss fight at the end of Wave 10.
+Wave	Enemies Introduced
+1	Basic
+2	Basic, Runner
+3	Basic, Runner, Tank
+4	Shooter
+5	Splitter
+6	Exploder
+7	Shielded
+8	Swarm
+9	All previous enemies, increased difficulty
+10	All previous enemies, followed by Guardian boss
+
+- Enemy health and spawn counts increase with each wave.
+- Enemies spawn in increasingly challenging combinations.
+- Every completed wave gives the player a chance to upgrade.
+- Defeating the boss unlocks Zone 2.
+- If enemies reach the base, the player loses health.
+3. Scoring and Currency System
+There are two separate currencies:
+Enemy Type	Currency Reward
+Basic	1 Basic Currency
+Runner	1 Runner Currency
+Tank	1 Tank Currency
+Shooter	1 Shooter Currency
+Splitter	1 Splitter Currency
+Exploder	1 Exploder Currency
+Shielded	1 Shielded Currency
+Swarm	1 Swarm Currency
+Guardian Boss	25 Boss Currency
+
+Important rules:
+- Killing an enemy gives its corresponding currency.
+- If an enemy escapes and leaves the map, the player receives 1 currency of that enemy's type.
+- Each enemy type has its own currency counter.
+- Boss currency can only be earned from bosses.
+- Display all currency balances on the shop page.
+4. Upgrade Shop
+Player Upgrades
+- Damage: Increase projectile damage.
+- Attack Speed: Shoot faster.
+- Movement Speed: Move faster.
+- Health: Increase maximum health.
+- Regeneration: Slowly restore health.
+- Critical Chance: Chance to deal double damage.
+- Critical Damage: Increase critical hit damage.
+- Projectile Size: Increase projectile size.
+- Projectile Speed: Make projectiles travel faster.
+- Multishot: Shoot additional projectiles.
+- Range: Increase attack range.
+Base Upgrades
+- Maximum Base Health.
+- Base Health Regeneration.
+- Base Shield.
+- Damage Reduction.
+- Emergency Defense.
+Special Upgrades
+- Chain Lightning: Damage multiple nearby enemies.
+- Explosive Shots: Projectiles explode on impact.
+- Piercing Shots: Projectiles pass through enemies.
+- Frost Shots: Slow down enemies.
+- Magnet: Automatically collect dropped rewards.
+Each upgrade should have 5 levels, with increasing costs per level.
+5. Shop Page Layout
+Organize the shop into these categories:
+1. Player Upgrades
+2. Base Upgrades
+3. Weapon Upgrades
+4. Special Abilities
+5. Zone Unlocks
+Each upgrade should display:
+- Upgrade name.
+- Description.
+- Current level.
+- Maximum level.
+- Currency required.
+- Upgrade button.
+- Visual indicator showing upgrade progress.
+6. Enemy Index
+Create a searchable Enemy Index with filters for:
+- Enemy name.
+- Attack type.
+- Difficulty.
+- Movement speed.
+- Health.
+- Enemy size.
+Each enemy entry should display:
+Information	Display
+Name	Enemy name
+Attack Type	Melee, ranged, explosive, etc.
+Difficulty	Easy, Medium, Hard, Very Hard
+Health	Numerical health
+Size	Visual bar
+Speed	Slow, Medium, Fast, Very Fast
+Tip	Best strategy for defeating it
+Behavior	Explanation of how it attacks
+
+Include filters for attack type and difficulty, plus a search bar.
+7. Music and Sound
+- Music intensity should increase as the wave number increases.
+- Waves 1–3: Calm action music.
+- Waves 4–6: Moderate intensity.
+- Waves 7–9: High intensity.
+- Wave 10: Intense boss battle music.
+- Shop and upgrade screen: Calm background music.
+- Boss defeat: Victory music.
+- Player defeat: Defeat music.
+- Smoothly transition between music tracks rather than abruptly switching.
+8. Game Controls and Pause System
+- Add a visible Pause button.
+- Press ESC to pause or resume.
+- Automatically pause when the player switches browser tabs or minimizes the window.
+- Pause all enemy movement, projectiles, wave timers, and spawning.
+- Display a pause menu with Resume, Restart, and Main Menu options.
+- Add a settings menu for music and sound volume.
+9. Game Progression
+- Each zone has 10 waves.
+- Each zone ends with a unique boss.
+- Defeating the boss unlocks the next zone.
+- Each new zone introduces new enemy types, stronger enemies, and better rewards.
+- Save player upgrades, currencies, unlocked zones, and wave progress automatically.
+- Returning players should be able to continue their saved game.
+
+
+
+
+
+
+
+
+
+
+
+
+This might also interest you.
+
+
+Ad
+Ad options
+
+
+
+Learn more
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+No I dont think you understand the website its not like that its like your trapped inside a small box and new different enemies attack you and if you dodge them and survive their attacks you get currency except for boss where their should be a way for you damage another way like making boss's projectiles hit him if you dodge now redo with this info.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Zone 1 – Enemy Types, Waves, Currency, and Upgrades
+Game concept: The player is trapped inside a small square arena. The player controls a small circle and must dodge enemies, attacks, and projectiles to survive. Enemies enter the arena and attack the player. The objective is to survive all 10 waves and defeat the boss.
+
+There are no towers or automatic defenses. The player is the only character being controlled.
+1. Arena and Player
+- The arena is a 3D-looking cube/square border occupying approximately 50% of the page's center.
+- The player is a small circle inside the arena.
+- The player can move in all directions inside the boundaries.
+- Enemies spawn from the edges of the arena.
+- Enemies attack the player using different attack patterns.
+- Touching an enemy or its projectile causes damage.
+- The player must dodge rather than automatically attack.
+- The player cannot leave the arena.
+2. Zone 1 Enemy Types
+Enemies should have different movement patterns and attacks.
+Enemy	Behavior and Attack	Difficulty
+Chaser	Follows the player directly.	Easy
+Dasher	Charges quickly toward the player's last position.	Medium
+Shooter	Shoots projectiles toward the player.	Medium
+Spinner	Moves around the arena while firing projectiles in multiple directions.	Medium
+Bouncer	Bounces around the arena unpredictably.	Medium
+Exploder	Chases the player and explodes when close.	Hard
+Sniper	Targets the player's position and fires a fast projectile after a warning indicator.	Hard
+Splitter	Splits into smaller enemies after a certain amount of time or when hit by an arena hazard.	Hard
+
+Enemy Index
+Create a separate searchable index on the game website.
+
+Each enemy should have:
+- Enemy name and picture.
+- Attack type.
+- Difficulty rating.
+- Health bar.
+- Size bar.
+- Movement speed.
+- Attack description.
+- Special abilities.
+- A useful survival tip.
+Filters:
+- Melee attacks
+- Ranged attacks
+- Charging attacks
+- Explosive attacks
+- Area attacks
+- Easy, Medium, Hard
+3. Currency System
+Important: Currency is earned by surviving enemies, not killing them.
+
+Each enemy has its own currency type.
+Enemy	Survival Reward
+Chaser	1 Chaser Currency
+Dasher	1 Dasher Currency
+Shooter	1 Shooter Currency
+Spinner	1 Spinner Currency
+Bouncer	1 Bouncer Currency
+Exploder	1 Exploder Currency
+Sniper	1 Sniper Currency
+Splitter	1 Splitter Currency
+
+Rules:
+- When an enemy successfully leaves the arena, award 1 currency of its type.
+- Enemies can leave after completing their attack or movement cycle.
+- The player must survive their attacks until they leave.
+- Currency should appear with a small collection animation.
+- Bosses have a separate reward system.
+4. Zone 1 Waves
+Each zone has 10 waves. Wave 10 is the boss fight.
+Wave	Enemy Types	Difficulty
+1	Chaser	Easy
+2	Chaser, Dasher	Easy
+3	Chaser, Shooter	Easy
+4	Dasher, Shooter, Bouncer	Medium
+5	Spinner, Chaser, Dasher	Medium
+6	Exploder, Shooter, Bouncer	Medium
+7	Sniper, Spinner, Dasher	Hard
+8	Splitter, Exploder, Shooter	Hard
+9	All previous enemies combined	Very Hard
+10	Zone 1 Boss	Boss Fight
+
+- Each wave increases enemy count, speed, and attack frequency.
+- Enemies should spawn in random combinations.
+- Each wave should become progressively harder.
+- Display a countdown before each wave.
+- Show the current wave and survival timer.
+- After completing a wave, allow the player to enter the upgrade shop.
+5. Zone 1 Boss – The Orbital Guardian
+
+
+
+
+
+
+
+
+2023game.com
+
+
+The boss should be different from normal enemies.
+
+Boss attacks:
+1. Projectile Burst – Fires several projectiles toward the player.
+2. Circular Blast – Fires projectiles in a circular pattern.
+3. Target Lock – Marks the player's location before firing a powerful projectile.
+4. Rapid Barrage – Fires multiple projectiles in quick succession.
+5. Summon – Temporarily summons smaller enemies.
+Boss damage mechanic – Projectile Reflection
+
+The player cannot damage the boss directly.
+
+Instead:
+- The boss fires projectiles at the player.
+- The player must dodge at the correct moment.
+- Some projectiles should continue traveling after missing the player.
+- If a projectile hits the boss, it damages the boss.
+- The player must position themselves strategically to make the boss's own projectiles hit it.
+- Different boss attacks should create different opportunities to reflect projectiles.
+- The boss health bar should be visible at the top of the screen.
+The player wins by making the boss take enough damage from its own projectiles.
+6. Upgrade Shop
+Upgrades should improve the player's ability to survive and dodge.
+Movement Upgrades
+- Movement Speed – Move faster.
+- Acceleration – Reach maximum speed faster.
+- Dash – Unlock a quick dash.
+- Dash Cooldown – Reduce dash waiting time.
+- Dash Distance – Travel farther when dashing.
+Survival Upgrades
+- Maximum Health – Increase player health.
+- Health Regeneration – Slowly recover health.
+- Damage Reduction – Reduce incoming damage.
+- Temporary Shield – Block one hit.
+- Extra Life – Revive once per wave.
+Special Abilities
+- Slow Motion – Temporarily slow enemy movement.
+- Energy Pulse – Push nearby enemies away.
+- Projectile Deflection – Redirect nearby projectiles.
+- Phase Shift – Temporarily become immune to damage.
+- Magnet – Automatically collect currency.
+Every upgrade should have:
+- Upgrade description.
+- Current level.
+- Maximum level.
+- Currency cost.
+- Upgrade button.
+- Upgrade effect.
+7. Music and Sound
+- Wave 1–3: Calm but suspenseful music.
+- Wave 4–6: Faster, more intense music.
+- Wave 7–9: High-intensity survival music.
+- Wave 10: Intense boss battle music.
+- Upgrade shop: Calm music.
+- Boss defeated: Victory music.
+- Player defeated: Defeat music.
+Music intensity should change smoothly according to the wave.
+8. Pause System
+- Visible pause button.
+- ESC key pauses the game.
+- Switching browser tabs automatically pauses the game.
+- Returning to the tab does not automatically resume.
+- Pause all enemies, projectiles, timers, and spawning.
+- Include Resume, Restart, and Main Menu options.
+9. Two Main Website Pages
+PAGE 1 – GAME
+
+
+
+
+
+
+
+
+
+store.steampowered.com
+
+
+- Square arena in the center.
+- Small controllable circle.
+- Enemy attacks and projectiles.
+- Health bar.
+- Wave counter.
+- Survival timer.
+- Currency counters.
+- Boss health bar.
+- Pause button.
+  
+  PAGE 2 – SHOP
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  a-to-jconnections.com
+- All currency balances.
+- Player upgrades.
+- Survival upgrades.
+- Special abilities.
+- Enemy index with search and filters.
+- Zone progression.
+
+10. Progression
+- Every zone has 10 waves.
+- Every 10th wave is a unique boss fight.
+- Defeating the boss unlocks the next zone.
+- Each new zone introduces new enemies, attacks, and boss mechanics.
+- Save currencies, upgrades, and unlocked zones automatically.
+Most important development rule: This is a dodge-and-survive bullet-hell game. Do not add guns, automatic shooting, towers, or enemies that the player must kill. The challenge is surviving enemy attacks, positioning strategically, and using enemy projectiles against bosses.
