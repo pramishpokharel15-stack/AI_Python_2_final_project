@@ -17,7 +17,7 @@ Local Data Storage
 But if have to use other stuff just put a note and make sure to explain how that code works. For the entire project
 also try to use your tokens efficiently.
 I want a the border to be a cube that and is like 50% of the inner center of the page
-The thing moving and getting controlled should be a small circle
+The thing moving and getting controlled should be a big circle
 
 Ok now their will be 2 pages 1 page is the game and the base screen and stuff and the other page is
 the shop.
