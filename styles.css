@@ -213,7 +213,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 .game-heading { margin-bottom: 14px; }
 .game-heading h1 { font-size: clamp(26px, 4vh, 40px); }
-.game-hud, .game-footer, .currency-hud, .ability-hud { width: min(94vw, 980px); }
+.game-hud, .game-footer, .ability-hud { width: min(94vw, 980px); }
 .game-hud { margin-bottom: 8px; }
 .arena-frame {
   width: min(82vh, 94vw, 1000px);
@@ -221,7 +221,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   border-width: 7px;
 }
 #arena { touch-action: none; }
-.ability-hud, .currency-hud {
+.ability-hud {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -231,13 +231,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   color: var(--muted);
   font: 10px var(--mono);
 }
-.ability-hud span, .currency-hud span {
+.ability-hud span {
   padding: 5px 8px;
   background: #191c29e8;
   border: 1px solid #ffffff10;
   border-radius: 6px;
 }
-.currency-hud { max-height: 62px; overflow: auto; }
 .ability-hud kbd {
   padding: 2px 4px;
   color: var(--mint);
@@ -319,14 +318,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .game-hud { margin-bottom: 5px; }
   .hud-card { min-height: 49px; }
   .arena-frame { width: min(72vh, 84vw, 760px); border-width: 5px; }
-  .ability-hud, .currency-hud { margin-bottom: 3px; }
+  .ability-hud { margin-bottom: 3px; }
   .game-footer { margin-top: 7px; }
 }
 @media (max-width: 720px) {
   .game-layout { min-height: calc(100vh - 104px); padding: 18px 10px 22px; }
   .arena-frame { width: min(82vh, 98vw); }
-  .currency-hud { max-height: 52px; }
-  .game-hud, .game-footer, .currency-hud, .ability-hud { width: min(96vw, 620px); }
+  .game-hud, .game-footer, .ability-hud { width: min(96vw, 620px); }
   .currency-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .merge-grid, .enemy-grid { grid-template-columns: 1fr; }
   .discovery-toast { right: 8px; bottom: 8px; }

@@ -607,6 +607,9 @@
     let lastFrame = 0;
     let animationId = 0;
     let skipPagehideSave = false;
+    let testerMode = false;
+    let testerCodeInput = "";
+    let testerSpeedMultiplier = 1;
 
     function currentZone() { return ZONES.find(zone => zone.id === run.zone) || ZONES[0]; }
     function upgradeLevel(id) { return save.upgrades[id] || 0; }
@@ -723,12 +726,14 @@
       hideOverlay();
     }
     function showPauseMenu() {
-      showOverlay("Paused", "Everything is still. Take a breath before going back in.", [
+      const buttons = [
         { label: "Resume", action: resumeGame },
         { label: "How to Play", action: () => showHowToPlay(showPauseMenu), secondary: true },
         { label: "Restart wave", action: () => startWave(run.wave, run.zone), secondary: true },
         { label: "Main menu", action: mainMenu, secondary: true }
-      ], "PAUSE MENU");
+      ];
+      if (testerMode) buttons.splice(3, 0, { label: "Tester Tools", action: () => showTesterTools(showPauseMenu), secondary: true });
+      showOverlay("Paused", "Everything is still. Take a breath before going back in.", buttons, "PAUSE MENU");
     }
     function pauseGame() {
       if (["idle", "victory", "defeat"].includes(run.state) || run.paused) return;
@@ -796,6 +801,71 @@
       extra.textContent = `Move with WASD or the arrow keys; on touch screens, drag inside the arena. Stot moves quickly toward your spawn-time position, never shoots, and exits shortly after arrival. Merger appears in Zone 3 Wave 5 and wanders; touching it triggers the nearest compatible merge. Merge Repulser also triggers merges on contact. Five Stot tokens buy an extra heart. Collect 10 Merger tokens to unlock the Merge Lab, then spend 200 Chaser tokens to unlock Auto-dodge. Toggle Auto-dodge in Settings & audio to turn its threat avoidance off or on. Dodge other contact attacks, warning lines, blasts, and enemy projectiles. Survive ten waves per zone; older enemy types stay in the spawn pool as you progress. Use ${formatKey(save.keybinds.dash)} to dash; ${formatKey(save.keybinds.slowMotion)} slows time, ${formatKey(save.keybinds.energyPulse)} pulses nearby threats, ${formatKey(save.keybinds.deflection)} deflects projectiles, and ${formatKey(save.keybinds.phaseShift)} activates phase shift when each ability is unlocked. Press ${formatKey(save.keybinds.skipWave)} during a regular wave to start the next wave without removing the current wave's enemies or spawns; up to three waves can overlap. A full clear resets the skip limit. Boss waves cannot be skipped. Press ${formatKey(save.keybinds.pause)} or the Pause button to pause; the game also pauses when you leave the tab. Bosses are only damaged by their own projectiles after a shot misses you, bounces off the arena wall, and hits the boss. The shop contains upgrades, the discovered-enemy index, and merge recipes. Health, tokens, upgrades, discoveries, settings, and progress are saved in this browser; use Save code settings to back them up or transfer them.`;
       showOverlay("How to Play", "", [{ label: "Back", action: backAction, secondary: true }], "GAME GUIDE", extra);
     }
+    function showTesterTools(backAction) {
+      if (!testerMode) return backAction();
+      showOverlay("Tester Tools", "Tester access and the speed boost last only for this session; progress and upgrades use normal saving.", [
+        { label: "Clear current waves", action: () => {
+          if (["idle", "victory", "defeat"].includes(run.state)) {
+            announce("Start a wave before clearing it");
+            backAction();
+            return;
+          }
+          run.waveSpawns = [];
+          run.enemies = [];
+          run.shots = [];
+          run.paused = false;
+          document.getElementById("pauseButton").textContent = "Pause";
+          if (run.boss || run.wave >= 10) {
+            run.boss = null;
+            winBoss();
+            return;
+          }
+          completeWave();
+          if (backAction === showPauseMenu) {
+            run.paused = true;
+            document.getElementById("pauseButton").textContent = "Resume";
+          }
+          backAction();
+        } },
+        { label: "Full HP + 1.5x speed", action: () => {
+          testerSpeedMultiplier = 1.5;
+          player.maxHp = maxHealth();
+          player.hp = player.maxHp;
+          save.currentHp = player.hp;
+          persist();
+          drawHud();
+          announce("Tester stats applied");
+          backAction();
+        }, secondary: true },
+        { label: "Buy all upgrades", action: () => {
+          UPGRADES.forEach(upgrade => { save.upgrades[upgrade.id] = upgrade.id === "autoDodge" ? 1 : 5; });
+          player.maxHp = maxHealth();
+          player.hp = Math.min(player.hp, player.maxHp);
+          save.currentHp = player.hp;
+          syncAutoDodgeSetting();
+          persist();
+          drawHud();
+          announce("All upgrades unlocked");
+          backAction();
+        }, secondary: true },
+        { label: "Spawn all enemy types", action: () => {
+          const wasIdle = run.state === "idle";
+          if (wasIdle) startWave(save.continueWave, save.zone, true);
+          ENEMIES.filter(enemy => !enemy.id.startsWith("boss")).forEach(enemy => spawnEnemy(enemy.id));
+          announce("Spawned all non-boss enemy types");
+          if (wasIdle) hideOverlay();
+          else backAction();
+        }, secondary: true },
+        { label: "Reveal all question marks", action: () => {
+          save.discovered = ENEMIES.map(enemy => enemy.id);
+          renderMergesIfShop();
+          persist();
+          announce("All discoveries revealed");
+          backAction();
+        }, secondary: true },
+        { label: "Back", action: backAction, secondary: true }
+      ], "TESTER MODE");
+    }
     function openKeybindSettings() {
       drawHud();
       const extra = document.createElement("div");
@@ -842,7 +912,7 @@
       syncAutoDodgeSetting();
       setStateLabel("READY");
       document.getElementById("pauseButton").textContent = "Pause";
-      showOverlay("Ready when you are.", `Zone ${run.zone}, wave ${save.continueWave} is next. Your current ${Math.ceil(save.currentHp)} HP carries forward.`, [
+      const buttons = [
         { label: "Play", action: () => {
           overlay.classList.add("fade-out");
           window.setTimeout(() => startWave(save.continueWave, save.zone, save.currentHp <= 0), 280);
@@ -857,7 +927,9 @@
           showOverlay("Settings & sound", "Toggle Auto-dodge here after unlocking it in the Merge Lab. Music intensity rises with the wave and calms in the shop.", [{ label: "Back to menu", action: mainMenu, secondary: true }], "SETTINGS", extra);
         }, secondary: true },
         { label: "Credits", action: () => menuSection("Credits", "Music and sound effects: original synthesized tones created in your browser. Images and visual assets: original canvas-drawn shapes. External libraries and APIs: none. Audio uses the browser Web Audio API; progress uses local storage.", "MADE FOR THE BOX"), secondary: true }
-      ], "A SMALL BOX. A BIG PROBLEM.");
+      ];
+      if (testerMode) buttons.splice(2, 0, { label: "Tester Tools", action: () => showTesterTools(mainMenu), secondary: true });
+      showOverlay("Ready when you are.", `Zone ${run.zone}, wave ${save.continueWave} is next. Your current ${Math.ceil(save.currentHp)} HP carries forward.`, buttons, "A SMALL BOX. A BIG PROBLEM.");
     }
     function openShop() { window.location.href = "shop.html#upgrade-tree"; }
     function completeWave() {
@@ -1810,6 +1882,17 @@
     }
     function onKeyDown(event) {
       const key = event.key.toLowerCase();
+      const target = event.target;
+      const typing = target instanceof HTMLElement
+        && (["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || target.isContentEditable);
+      if (!typing && run.state === "idle" && !run.rebind && /^[a-z]$/.test(key)) {
+        testerCodeInput = (testerCodeInput + key).slice(-6);
+        if (testerCodeInput === "tester" && !testerMode) {
+          testerMode = true;
+          mainMenu();
+          announce("Tester mode enabled");
+        }
+      }
       if (run.rebind) {
         event.preventDefault();
         const duplicate = Object.keys(save.keybinds).find(id => id !== run.rebind.id && save.keybinds[id] === key);
