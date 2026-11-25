@@ -11,12 +11,17 @@
 <body data-page="shop">
   <header class="topbar">
     <a class="brand" href="index.html"><span class="brand-mark">□</span> LITTLE BOX</a>
-    <nav class="main-nav" aria-label="Main navigation">
+    <button id="navMenuButton" class="menu-button" type="button" aria-label="Open navigation" aria-controls="mainNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="mainNav" class="main-nav" aria-label="Main navigation">
       <a class="nav-link" href="index.html">Arena</a>
+      <a class="nav-link" href="endless.html">Endless Mode</a>
       <a class="nav-link active" href="#upgrade-tree">Upgrade tree &amp; index</a>
     </nav>
     <div class="top-actions">
       <span id="saveStatus" class="save-status" aria-live="polite">Saved locally</span>
+      <button id="resetProgress" class="button button-danger button-small" type="button">Reset progress</button>
       <a class="button button-small" href="index.html">Return to arena</a>
     </div>
   </header>
@@ -34,7 +39,7 @@
     </section>
 
     <section class="upgrade-section" id="upgrade-tree">
-      <div class="section-title"><div><p class="eyebrow">UNLOCK BRANCHES AS YOU GROW</p><h2>Upgrade tree</h2><p class="section-copy">Select a hex to see its details and cost. Unknown nodes unlock after their prerequisites.</p></div></div>
+      <div class="section-title"><div><p class="eyebrow">UNLOCK BRANCHES AS YOU GROW</p><h2>Upgrade tree</h2><p class="section-copy">Select a hex to open its purchase panel below. It shows the required token, cost, and balance; locked upgrades require their prerequisites.</p></div></div>
       <div id="upgradeGroups" class="upgrade-tree-board"></div>
       <div id="upgradeDetails" class="upgrade-detail" aria-live="polite"></div>
     </section>
@@ -60,7 +65,7 @@
     </section>
 
     <section class="zone-section">
-      <div class="section-title"><div><p class="eyebrow">FIVE ROOMS · FIFTY WAVES</p><h2>Zone progression</h2></div></div>
+      <div class="section-title"><div><p class="eyebrow">FIVE ROOMS · FIFTY WAVES</p><h2>Zone progression</h2></div><button id="resetZoneWave" class="button button-secondary button-small" type="button">Reset current zone to Wave 1</button></div>
       <div id="zoneList" class="zone-list"></div>
     </section>
 
@@ -72,6 +77,18 @@
           <label>Music <input id="musicVolume" type="range" min="0" max="100" value="35"></label>
           <label>Effects <input id="soundVolume" type="range" min="0" max="100" value="55"></label>
           <label class="mute-setting"><input id="muteSound" type="checkbox"> Mute all</label>
+        </div>
+        <div class="tester-activation">
+          <p>Local testing only: enter the exact code to enable the in-game Admin Panel.</p>
+          <form id="testerActivationForm">
+            <label for="testerCode">Tester code</label>
+            <div class="tester-activation-controls">
+              <input id="testerCode" type="text" autocomplete="off" spellcheck="false">
+              <button class="button button-small" type="submit">Enable tester mode</button>
+            </div>
+          </form>
+          <p id="testerActivationStatus" class="tester-activation-status" aria-live="polite"></p>
+          <a id="testerArenaLink" class="text-link" href="index.html" hidden>Open arena to use Admin Panel ↗</a>
         </div>
       </details>
     </section>

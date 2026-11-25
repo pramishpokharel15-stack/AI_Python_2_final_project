@@ -1,1 +1,21 @@
-Heres what I want you to change make the menu 
+
+
+
+
+Little Box is a static browser game. Move around a small arena, dodge enemy attacks, survive waves, and spend earned tokens on upgrades.
+
+Project files
+
+- index.html — The main arena page. It provides the game canvas, health and wave displays, pause controls, settings, save/reset controls, and the hidden tester panel. It loads app.js for behavior and styles.css for appearance.
+- app.js — The game logic. It defines zones, enemies, attacks, merge recipes, currencies, and upgrade trees; handles movement, collisions, waves, and boss fights; draws the arena on the canvas; and saves progress in browser local storage. It also contains the shop and local tester tools.
+- shop.html — The upgrade and reference page. JavaScript fills in currency totals, upgrade branches, merge recipes, enemy index, and zone progression. Players can search and filter the discovered enemy list and return to the arena.
+- styles.css — The shared visual design for both pages, including colors, layout, buttons, game and shop panels, and mobile-friendly styles. It controls presentation, not game rules.
+- README.md — Player instructions and project documentation. It explains controls, waves, currencies, upgrades, tester mode, and how to publish the static site.
+- notes.txt — The original project brief and collected feature ideas. It documents the goals that informed the game but is not loaded by the website.
+- vercel.json — Vercel hosting settings for clean URLs and basic security-related response headers. The game itself remains static and needs no server.
+- .gitattributes — Git configuration that automatically normalizes text-file line endings.
+- BETTER.txt — This file: a plain-language guide to the project and the purpose of each file.
+
+How the pieces work together
+
+The browser opens index.html or shop.html. Both load app.js and styles.css. On the arena page, JavaScript reads player input, updates the game state, checks collisions and attacks, and redraws the canvas repeatedly. On the shop page, it builds the currency, upgrade, merge, and enemy-index sections from the same game data. Local storage keeps progress on the player's device between visits.

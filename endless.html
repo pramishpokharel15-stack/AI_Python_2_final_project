@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10121b">
+  <title>Little Box - Endless Mode</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body data-page="endless">
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">□</span> LITTLE BOX</a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-link" href="index.html">Arena</a>
+      <a class="nav-link active" href="endless.html">Endless Mode</a>
+      <a class="nav-link" href="shop.html">Upgrade tree &amp; index</a>
+    </nav>
+  </header>
+  <main class="shop-layout">
+    <section class="game-heading">
+      <p class="eyebrow">NO FINAL WAVE</p>
+      <h1>Endless Mode</h1>
+      <p>A separate run with scaling enemies, regular boss encounters, and persistent records.</p>
+    </section>
+    <section>
+      <div class="section-title"><div><p class="eyebrow">BEST RUN</p><h2>High Score</h2></div></div>
+      <div class="currency-list endless-stat-grid">
+        <article class="currency-card"><span class="currency-icon">W</span><div><strong id="endlessHighWave">0</strong><span>Best Wave Reached</span></div></article>
+        <article class="currency-card"><span class="currency-icon">B</span><div><strong id="endlessBosses">0</strong><span>Bosses Defeated</span></div></article>
+        <article class="currency-card"><span class="currency-icon">E</span><div><strong id="endlessEncountered">0</strong><span>Total Enemies Encountered</span></div></article>
+        <article class="currency-card"><span class="currency-icon">C</span><div><strong id="endlessWaves">0</strong><span>Waves Completed</span></div></article>
+        <article class="currency-card"><span class="currency-icon">X</span><div><strong id="endlessExited">0</strong><span>Enemies Exited</span></div></article>
+        <article class="currency-card"><span class="currency-icon">T</span><div><strong id="endlessTime">0s</strong><span>Survival Time</span></div></article>
+        <article class="currency-card"><span class="currency-icon">+</span><div><strong id="endlessRewards">0</strong><span>Rewards Earned</span></div></article>
+        <article class="currency-card"><span class="currency-icon">◎</span><div><strong id="endlessCosmetics">None yet</strong><span>Cosmetic Unlocks</span></div></article>
+      </div>
+    </section>
+    <section class="upgrade-section">
+      <div class="upgrade-detail">
+        <div class="upgrade-detail-copy"><p class="eyebrow">NEW RUN</p><h3>Enter the Endless arena</h3><p>Your campaign save remains unchanged. Progress and records are stored separately.</p></div>
+        <button id="playEndless" class="button" type="button">Play Endless Mode</button>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">Endless Mode records are saved on this device.</footer>
+</body>
+</html>

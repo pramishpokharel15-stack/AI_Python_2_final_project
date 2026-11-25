@@ -11,8 +11,12 @@
 <body data-page="game">
   <header class="topbar">
     <a class="brand" href="index.html"><span class="brand-mark">□</span> LITTLE BOX</a>
-    <nav class="main-nav" aria-label="Main navigation">
+    <button id="navMenuButton" class="menu-button" type="button" aria-label="Open navigation" aria-controls="mainNav" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="mainNav" class="main-nav" aria-label="Main navigation">
       <a class="nav-link active" href="index.html">Arena</a>
+      <a class="nav-link" href="endless.html">Endless Mode</a>
       <a class="nav-link" href="shop.html">Upgrade tree &amp; index</a>
     </nav>
     <div class="top-actions">
@@ -25,7 +29,7 @@
     <section class="game-heading">
       <p class="eyebrow" id="zoneHeading">ZONE 01 · THE QUIET ROOM</p>
       <h1>Stay inside. Stay alive.</h1>
-      <p>Dodge the attacks, survive each wave, and turn the bosses' own projectiles against them.</p>
+      <p>Dodge the attacks, survive each wave, and counterattack with your own shots.</p>
     </section>
 
     <section class="game-hud" aria-label="Game status">
@@ -38,6 +42,61 @@
 
     <div class="arena-frame">
       <canvas id="arena" width="800" height="800" aria-label="Dodge arena. Move with WASD or arrow keys. Use unlocked abilities with their configured keys."></canvas>
+      <button id="adminToggle" class="button button-small admin-toggle" type="button" hidden>Admin Panel</button>
+      <section id="adminPanel" class="admin-panel" role="dialog" aria-modal="false" aria-labelledby="adminTitle" hidden>
+        <div class="admin-heading"><div><p class="eyebrow">LOCAL DEVELOPMENT TOOLS</p><h2 id="adminTitle">Tester Admin</h2></div><button id="adminClose" class="button button-secondary button-small" type="button">Close</button></div>
+        <div class="admin-content">
+          <details open><summary>Enemy spawner</summary>
+            <label>Enemy or boss<select id="adminSpawnType"></select></label>
+            <div class="admin-row"><label>Quantity (bosses spawn singly)<input id="adminSpawnQuantity" type="number" min="1" max="60" value="1"></label><label>Location<select id="adminSpawnLocation"><option value="edge">Random edge</option><option value="center">Center</option><option value="player">Near player</option><option value="coordinates">Coordinates</option></select></label></div>
+            <div class="admin-row"><label>Spawn X<input id="adminSpawnX" type="number" min="0" max="800" value="400"></label><label>Spawn Y<input id="adminSpawnY" type="number" min="0" max="800" value="400"></label></div>
+            <div class="admin-actions"><button class="button" data-admin-action="spawn" type="button">Spawn now</button><button class="button button-secondary" data-admin-action="remove-enemies" type="button">Remove all enemies</button></div>
+          </details>
+          <details><summary>Resources</summary>
+            <label>Currency<select id="adminCurrency"></select></label>
+            <label>Amount<input id="adminResourceAmount" type="number" min="0" value="100"></label>
+            <div class="admin-actions"><button class="button" data-admin-action="set-currency" type="button">Set amount</button><button class="button button-secondary" data-admin-action="add-currency" type="button">Add amount</button><button class="button button-secondary" data-admin-action="subtract-currency" type="button">Subtract amount</button></div>
+            <div class="admin-actions"><button class="button button-secondary" data-admin-action="unlock-currencies" type="button">Unlock all currencies</button><button class="button button-secondary" data-admin-action="unlimited-on" type="button">Enable unlimited</button><button class="button button-secondary" data-admin-action="unlimited-off" type="button">Disable unlimited</button></div>
+          </details>
+          <details><summary>Player controls</summary>
+            <div class="admin-row"><label>Current HP<input id="adminCurrentHp" type="number" min="0" value="3"></label><label>Maximum HP<input id="adminMaxHp" type="number" min="1" value="3"></label></div>
+            <div class="admin-actions"><button class="button button-secondary" data-admin-action="set-current-hp" type="button">Set current HP</button><button class="button button-secondary" data-admin-action="set-max-hp" type="button">Set maximum HP</button><button class="button" data-admin-action="max-hp" type="button">Set HP to max</button><button class="button button-secondary" data-admin-action="restore-health" type="button">Restore full health</button></div>
+            <div class="admin-actions"><button class="button button-secondary" data-admin-action="invincible-on" type="button">Enable invincibility</button><button class="button button-secondary" data-admin-action="invincible-off" type="button">Disable invincibility</button><button class="button button-secondary" data-admin-action="teleport" type="button">Teleport to coordinates</button><button class="button button-secondary" data-admin-action="reset-position" type="button">Reset position</button></div>
+          </details>
+          <details><summary>Progression</summary>
+            <div class="admin-row"><label>Zone<select id="adminZone"></select></label><label>Wave<select id="adminWave"></select></label></div>
+            <div class="admin-actions"><button class="button" data-admin-action="jump-zone" type="button">Jump to zone</button><button class="button button-secondary" data-admin-action="start-wave" type="button">Start wave</button><button class="button button-secondary" data-admin-action="skip-wave" type="button">Skip current wave</button><button class="button button-secondary" data-admin-action="complete-wave" type="button">Complete current wave</button></div>
+            <div class="admin-actions"><button class="button button-secondary" data-admin-action="unlock-zones" type="button">Unlock all zones</button><button class="button button-secondary" data-admin-action="unlock-index" type="button">Unlock all enemies in index</button><button class="button button-secondary" data-admin-action="unlock-merged" type="button">Unlock all merged enemies</button><button class="button button-secondary" data-admin-action="unlock-upgrades" type="button">Unlock all upgrades</button><button class="button button-danger" data-admin-action="reset-waves" type="button">Reset wave progression</button></div>
+          </details>
+          <details><summary>Endless Mode controls</summary>
+            <div class="admin-row">
+              <label>Endless wave<input id="adminEndlessWave" type="number" min="1" value="1"></label>
+              <label>Boss HP<input id="adminEndlessBossHp" type="number" min="10" value="60"></label>
+            </div>
+            <div class="admin-row">
+              <label>Spawn rate scale<input id="adminSpawnRateScale" type="number" min="0.5" max="3" step="0.1" value="1"></label>
+              <label>Max enemy scale<input id="adminMaxEnemyScale" type="number" min="0.5" max="2" step="0.1" value="1"></label>
+            </div>
+            <div class="admin-actions">
+              <button class="button" data-admin-action="endless-start" type="button">Start/Jump to Endless wave</button>
+              <button class="button button-secondary" data-admin-action="endless-boss" type="button">Spawn Endless boss</button>
+              <button class="button button-secondary" data-admin-action="endless-boss-off" type="button">Disable boss spawning</button>
+              <button class="button button-secondary" data-admin-action="endless-boss-on" type="button">Enable boss spawning</button>
+              <button class="button button-secondary" data-admin-action="endless-scale-off" type="button">Disable scaling</button>
+              <button class="button button-secondary" data-admin-action="endless-scale-on" type="button">Enable scaling</button>
+              <button class="button button-secondary" data-admin-action="endless-complete" type="button">Complete current wave</button>
+            </div>
+          </details>
+          <details><summary>Testing tools &amp; debug</summary>
+            <label>Merged enemy for combination test<select id="adminMergeType"></select></label>
+            <div class="admin-actions"><button class="button button-secondary" data-admin-action="projectile" type="button">Spawn player projectile</button><button class="button button-secondary" data-admin-action="enemy-ability" type="button">Test selected enemy ability</button><button class="button button-secondary" data-admin-action="merge-test" type="button">Test merge combination</button><button class="button button-secondary" data-admin-action="boss-attack" type="button">Test boss attack</button></div>
+            <div class="admin-row"><label>Game speed<select id="adminGameSpeed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="5">5×</option></select></label><button class="button button-secondary" data-admin-action="pause" type="button">Pause / resume</button></div>
+            <div class="admin-actions"><button class="button button-secondary" data-admin-action="reset-scenario" type="button">Reset test scenario</button><button class="button button-secondary" data-admin-action="show-stats" type="button">Refresh enemy stats</button></div>
+            <pre id="adminStats" class="admin-stats" aria-live="polite">Start a wave to view live stats.</pre>
+            <button class="button button-danger admin-exit" data-admin-action="exit-tester" type="button">Exit testing mode</button>
+          </details>
+        </div>
+      </section>
       <div class="arena-label"><span class="live-dot"></span><span id="arenaState">READY</span></div>
       <div id="gameOverlay" class="game-overlay" aria-live="polite">
         <div class="overlay-card">
@@ -53,7 +112,7 @@
     </div>
 
     <section class="game-footer">
-      <div class="control-hint"><span class="key">SPACE</span> Dash <span class="key">Q / E / R / F</span> Abilities</div>
+      <div class="control-hint"><span class="key">SPACE</span> Dash <span id="attackKeyHint" class="key">X</span> Attack enemies / boss <span class="key">Q / E / R / F</span> Abilities</div>
       <div class="control-hint"><span id="skipKeyHint" class="key">L</span> Skip wave · max 3 in a row</div>
       <a class="text-link" href="shop.html#upgrade-tree">Upgrade tree &amp; enemy index <span aria-hidden="true">↗</span></a>
     </section>
@@ -79,6 +138,7 @@
           <button id="generateSaveCode" class="button" type="button">Generate code</button>
           <button id="copySaveCode" class="button button-secondary" type="button">Copy code</button>
           <button id="importSaveCode" class="button button-secondary" type="button">Import code</button>
+          <button id="resetProgress" class="button button-danger" type="button">Reset all progress</button>
         </div>
       </div>
     </details>

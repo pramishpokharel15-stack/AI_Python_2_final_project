@@ -2,6 +2,11 @@
   "use strict";
 
   const SAVE_KEY = "little-box-save-v1";
+  const TESTER_KEY = "gameTesterMode";
+  const TESTER_BACKUP_KEY = "gameTesterBackup-v1";
+  const TESTER_UNLIMITED_KEY = "gameTesterUnlimited";
+  const ADMIN_PANEL_KEY = "gameAdminPanelOpen";
+  const ENDLESS_SAVE_KEY = "little-box-endless-v1";
   const ZONES = [
     { id: 1, name: "The Quiet Room", boss: "Orbital Guardian", hp: 1, speed: 1, bossHp: 60, color: "#ff698f" },
     { id: 2, name: "Afterimage Hall", boss: "Prism Warden", hp: 1.2, speed: 1.05, bossHp: 78, color: "#a98aff" },
@@ -64,11 +69,11 @@
     { id: "phantomJumper", name: "Phantom Jumper", zone: 2, hp: 41, speed: 5, damage: 1, icon: "◈", color: "#c4abff", attack: "Teleporting", difficulty: "Hard", size: 15, pattern: "phantomTeleport", description: "Fades out, teleports, then reappears nearby.", special: "Warning flash before each jump.", tip: "Keep room around the fading outline." },
     { id: "gravityController", name: "Gravity Controller", zone: 2, hp: 61, speed: 3, damage: 1, icon: "⊛", color: "#ed9aff", attack: "Area", difficulty: "Very Hard", size: 19, pattern: "gravity", description: "Moves near the player while alternating between pulls and pushes.", special: "Telegraphed gravity pulses.", tip: "Change direction when its pulse color changes." },
     { id: "splitSummoner", name: "Split Summoner", zone: 2, hp: 65, speed: 4, damage: 1, icon: "✧", color: "#e6aaff", attack: "Summoning", difficulty: "Very Hard", size: 20, pattern: "summonSplit", description: "Summons weak split-shaped helpers that never split again.", special: "Summon warning and limited helper count.", tip: "Watch the summon flash and leave a path open." },
-    { id: "boss1", name: "Orbital Guardian", zone: 1, hp: 60, speed: 2, speedStat: 35, damage: 1, icon: "⬡", color: "#ff698f", attack: "Boss", difficulty: "Very Hard", size: 43, pattern: "boss", description: "The Zone 1 boss uses bursts, circular attacks, target locks, and summons.", special: "Only its own wall-ricocheted projectiles can damage it.", tip: "Dodge until a missed shot bounces back toward the Guardian." },
-    { id: "boss2", name: "Prism Warden", zone: 2, hp: 78, speed: 2, speedStat: 35, damage: 1, icon: "⬡", color: "#a98aff", attack: "Boss", difficulty: "Very Hard", size: 43, pattern: "boss", description: "A shifting boss that alternates projectile patterns and summons.", special: "Only its own wall-ricocheted projectiles can damage it.", tip: "Watch its attack warning and use the arena walls to return shots." },
-    { id: "boss3", name: "Tidal Engine", zone: 3, hp: 96, speed: 2, speedStat: 35, damage: 1, icon: "⬡", color: "#5bdcf2", attack: "Boss", difficulty: "Very Hard", size: 43, pattern: "boss", description: "A tidal boss with bursts, circular attacks, target locks, and summons.", special: "Only its own wall-ricocheted projectiles can damage it.", tip: "Let a missed shot rebound into the Engine." },
-    { id: "boss4", name: "Ember Crown", zone: 4, hp: 114, speed: 2, speedStat: 35, damage: 1, icon: "⬡", color: "#ff9d59", attack: "Boss", difficulty: "Very Hard", size: 43, pattern: "boss", description: "An ember boss with bursts, circular attacks, target locks, and summons.", special: "Only its own wall-ricocheted projectiles can damage it.", tip: "Dodge the warning first; make its shots return after a wall bounce." },
-    { id: "boss5", name: "Null Sovereign", zone: 5, hp: 132, speed: 2, speedStat: 35, damage: 1, icon: "⬡", color: "#d8a6ff", attack: "Boss", difficulty: "Very Hard", size: 43, pattern: "boss", description: "The final boss combines all four patterns and calls in reinforcements.", special: "Only its own wall-ricocheted projectiles can damage it.", tip: "Use each warning to find a safe place for the returning shots." }
+    { id: "boss1", name: "Orbital Guardian", zone: 1, hp: 60, speed: 2, speedStat: 45, damage: 1, icon: "⬡", color: "#ff698f", attack: "Boss", difficulty: "Very Hard", size: 43, pattern: "boss", description: "The Zone 1 boss uses bursts, circular attacks, target locks, summons, and a warned laser.", special: "Only player-fired shots and abilities can damage it.", tip: "Leave the marked laser line before it fires; attack with X." },
+    { id: "boss2", name: "Prism Warden", zone: 2, hp: 78, speed: 2, speedStat: 35, damage: 1, icon: "⬡", color: "#a98aff", attack: "Boss", difficulty: "Very Hard", size: 43, pattern: "boss", description: "A shifting boss that alternates projectile patterns, lasers, and summons.", special: "Only player-fired shots and abilities can damage it.", tip: "Watch its attack warning and move off the laser line." },
+    { id: "boss3", name: "Tidal Engine", zone: 3, hp: 96, speed: 2, speedStat: 35, damage: 1, icon: "⬡", color: "#5bdcf2", attack: "Boss", difficulty: "Very Hard", size: 43, pattern: "boss", description: "A tidal boss with bursts, circular attacks, target locks, and summons.", special: "Only player-fired shots and abilities can damage it.", tip: "Dodge the warnings and use your own shots to attack." },
+    { id: "boss4", name: "Ember Crown", zone: 4, hp: 114, speed: 2, speedStat: 35, damage: 1, icon: "⬡", color: "#ff9d59", attack: "Boss", difficulty: "Very Hard", size: 43, pattern: "boss", description: "An ember boss with bursts, circular attacks, target locks, and summons.", special: "Only player-fired shots and abilities can damage it.", tip: "Dodge the warning first and keep firing between attacks." },
+    { id: "boss5", name: "Null Sovereign", zone: 5, hp: 132, speed: 2, speedStat: 35, damage: 1, icon: "⬡", color: "#d8a6ff", attack: "Boss", difficulty: "Very Hard", size: 43, pattern: "boss", description: "The final boss combines all four patterns and calls in reinforcements.", special: "Only player-fired shots and abilities can damage it.", tip: "Use each warning to find a safe place before counterattacking." }
   ];
   const ENEMY_BY_ID = Object.fromEntries(ENEMIES.map(enemy => [enemy.id, enemy]));
   const BOSS_CURRENCY = ZONES.map(zone => ({ id: `boss${zone.id}`, name: `Zone ${zone.id} boss`, icon: "♢" }));
@@ -122,7 +127,7 @@
 
   const UPGRADE_GROUPS = [
     { name: "Damage", upgrades: [
-      { id: "reflectionPower", name: "Reflected force", currency: "shooter", cost: 2, requires: [], description: "Boss projectiles deal 10% more damage when they ricochet back into a boss." }
+      { id: "reflectionPower", name: "Reflected force", currency: "shooter", cost: 2, requires: [], description: "Player projectiles deal 10% more damage to bosses per level." }
     ] },
     { name: "Survival", upgrades: [
       { id: "maxHealth", name: "Extra heart", currency: "stot", cost: 5, requires: [], description: "Spend 5 Stot tokens to increase maximum health by 1. Your current HP is not refilled." },
@@ -146,10 +151,111 @@
       { id: "extraLife", name: "Second chance", currency: "boss1", cost: 2, requires: ["shield"], description: "Once per wave, survive a fatal hit; more levels restore a little extra HP." }
     ] }
   ];
+  const MERGED_UPGRADE_GROUPS = [
+    { name: "Slow Shooter", enemy: "slowShooter", upgrades: [
+      ["damage", "Stronger Ice", 2, "Increase its projectile damage slightly."],
+      ["slow", "Deep Freeze", 2, "Extend its slowing effect."],
+      ["spread", "Frost Spread", 3, "Make its projectiles slightly larger."],
+      ["cooldown", "Rapid Cooling", 3, "Reduce its firing cooldown."],
+      ["absolute", "Absolute Zero", 4, "Unlock a stronger slow on every fourth shot."]
+    ] },
+    { name: "Explosive Chaser", enemy: "explosiveChaser", upgrades: [
+      ["radius", "Larger Explosion", 2, "Increase its blast radius."],
+      ["damage", "Powerful Blast", 2, "Increase blast damage."],
+      ["speed", "Persistent Pursuit", 3, "Improve its chasing speed."],
+      ["chain", "Chain Reaction", 4, "Trigger nearby explosive chasers."]
+    ] },
+    { name: "Rolling Rock", enemy: "rollingRock", upgrades: [
+      ["impact", "Heavy Impact", 2, "Increase collision damage."],
+      ["armor", "Reinforced Armor", 2, "Improve its existing damage reduction, capped at 85%."],
+      ["speed", "Rolling Speed", 3, "Increase movement speed."],
+      ["quake", "Earthquake", 4, "Unlock a periodic ground-impact pulse."]
+    ] },
+    { name: "Frost Sniper", enemy: "frostSniper", upgrades: [
+      ["slow", "Deep Freeze", 2, "Extend its slowing effect."],
+      ["accuracy", "Precision Shot", 2, "Improve shot speed and accuracy."],
+      ["range", "Long Range", 3, "Increase effective attack range."],
+      ["pierce", "Piercing Ice", 4, "Fire a small paired shot."]
+    ] },
+    { name: "Toxic Spinner", enemy: "toxicSpinner", upgrades: [
+      ["poison", "Stronger Poison", 2, "Extend its poison duration and total damage."],
+      ["trail", "Toxic Trail", 2, "Leave temporary poison hazards while spinning."],
+      ["rotation", "Wider Rotation", 3, "Increase poison projectile coverage."],
+      ["spin", "Deadly Spin", 4, "Unlock an enhanced spinning volley."]
+    ] },
+    { name: "Explosive Dasher", enemy: "explosiveDasher", upgrades: [
+      ["radius", "Larger Explosion", 2, "Increase its blast radius."],
+      ["damage", "Powerful Blast", 2, "Increase blast damage."],
+      ["speed", "Charging Force", 3, "Improve its charge speed."],
+      ["cooldown", "Quick Fuse", 4, "Reduce the time between charges."]
+    ] },
+    { name: "Guardian Healer", enemy: "guardianHealer", upgrades: [
+      ["healing", "Restorative Light", 2, "Increase nearby ally healing."],
+      ["shield", "Lasting Guard", 2, "Extend ally shields."],
+      ["aura", "Wider Sanctuary", 3, "Increase support range."],
+      ["resilience", "Guardian Shell", 4, "Increase its health modestly."]
+    ] },
+    { name: "Phantom Jumper", enemy: "phantomJumper", upgrades: [
+      ["teleport", "Long Blink", 2, "Increase its teleport range."],
+      ["fade", "Fading Veil", 2, "Extend its fading window."],
+      ["ambush", "Phantom Strike", 3, "Improve its reappearance attack."],
+      ["cooldown", "Rift Rhythm", 4, "Reduce its teleport cooldown."]
+    ] },
+    { name: "Gravity Controller", enemy: "gravityController", upgrades: [
+      ["pulse", "Stronger Pull", 2, "Increase its gravity pulse force."],
+      ["range", "Wide Orbit", 2, "Increase its pulse range."],
+      ["duration", "Lasting Gravity", 3, "Extend its gravity effect."],
+      ["cooldown", "Rapid Shift", 4, "Reduce time between pulses."]
+    ] },
+    { name: "Split Summoner", enemy: "splitSummoner", upgrades: [
+      ["summons", "Extra Helpers", 2, "Allow one additional helper nearby."],
+      ["health", "Sturdy Fragments", 2, "Improve helper health modestly."],
+      ["cooldown", "Quick Summoning", 3, "Reduce its summon cooldown."],
+      ["split", "Recursive Echo", 4, "Allow one extra generation of tiny helpers."]
+    ] },
+    { name: "Merge Repulser", enemy: "mergeRepulser", upgrades: [
+      ["force", "Focused Pulse", 2, "Increase its repulsion pulse force."],
+      ["range", "Broad Field", 2, "Increase the pulse radius."],
+      ["speed", "Rift Pressure", 3, "Improve its movement speed."],
+      ["cooldown", "Unsteady Orbit", 4, "Reduce time between pulses."]
+    ] }
+  ].map(group => ({
+    name: `${group.name} Branch`,
+    upgrades: group.upgrades.map(([effect, name, cost, description], index) => ({
+      id: `merged_${group.enemy}_${effect}`,
+      name,
+      currency: group.enemy,
+      cost,
+      requires: index === 0 ? [] : [`merged_${group.enemy}_${group.upgrades[index - 1][0]}`],
+      description,
+      maxLevel: 3,
+      mergedEnemy: group.enemy,
+      effect
+    }))
+  }));
+  const ALL_UPGRADE_GROUPS = [...UPGRADE_GROUPS, ...MERGED_UPGRADE_GROUPS];
   const AUTO_DODGE_UPGRADE = { id: "autoDodge", name: "Auto-dodge", currency: "chaser", cost: 200 };
-  const UPGRADES = [...UPGRADE_GROUPS.flatMap(group => group.upgrades), AUTO_DODGE_UPGRADE];
+  const UPGRADES = [...ALL_UPGRADE_GROUPS.flatMap(group => group.upgrades), AUTO_DODGE_UPGRADE];
+  function isUnlimitedResources() {
+    try { return testerActivationEnabled() && localStorage.getItem(TESTER_UNLIMITED_KEY) === "true"; }
+    catch (error) {
+      console.error("Could not read the tester resource setting:", error);
+      return false;
+    }
+  }
+  function canAfford(currency, amount) {
+    return isUnlimitedResources() || (save.currencies[currency] || 0) >= amount;
+  }
+  function spendCurrency(currency, amount) {
+    if (!canAfford(currency, amount)) return false;
+    if (!isUnlimitedResources()) save.currencies[currency] -= amount;
+    return true;
+  }
+  function mergedUpgradeLevel(enemyId, effect) {
+    return save.upgrades[`merged_${enemyId}_${effect}`] || 0;
+  }
   let selectedUpgradeId = "reflectionPower";
-  const defaultKeybinds = { pause: "escape", dash: " ", slowMotion: "q", energyPulse: "e", deflection: "r", phaseShift: "f", skipWave: "l" };
+  const defaultKeybinds = { pause: "escape", dash: " ", slowMotion: "q", energyPulse: "e", deflection: "r", phaseShift: "f", skipWave: "l", attack: "x" };
   const defaultSave = () => ({
     currencies: Object.fromEntries(CURRENCIES.map(currency => [currency.id, 0])),
     upgrades: Object.fromEntries(UPGRADES.map(upgrade => [upgrade.id, 0])),
@@ -201,7 +307,8 @@
     }
     for (const key of Object.keys(normalized.upgrades)) {
       const value = Number(normalized.upgrades[key]);
-      normalized.upgrades[key] = Number.isFinite(value) ? Math.max(0, Math.min(5, value)) : 0;
+      const maxLevel = UPGRADES.find(upgrade => upgrade.id === key)?.maxLevel || (key === "autoDodge" ? 1 : 5);
+      normalized.upgrades[key] = Number.isFinite(value) ? Math.max(0, Math.min(maxLevel, value)) : 0;
     }
     for (const key of Object.keys(defaultKeybinds)) {
       if (typeof normalized.keybinds[key] !== "string" || !normalized.keybinds[key]) normalized.keybinds[key] = defaultKeybinds[key];
@@ -243,6 +350,70 @@
       console.error("Could not read the Little Box save:", error);
     }
   }
+  function testerActivationEnabled() {
+    try { return localStorage.getItem(TESTER_KEY) === "tester"; }
+    catch (error) {
+      showStorageStatus("Tester setting unavailable", true);
+      console.error("Could not read the tester activation field:", error);
+      return false;
+    }
+  }
+  function connectResetButton(onReset = () => {}) {
+    const button = document.getElementById("resetProgress");
+    if (!button) return;
+    button.addEventListener("click", () => {
+      if (!window.confirm("Reset all saved progress, currencies, upgrades, and discoveries? This cannot be undone.")) return;
+      try {
+        localStorage.removeItem(SAVE_KEY);
+        localStorage.removeItem(TESTER_KEY);
+        localStorage.removeItem(TESTER_BACKUP_KEY);
+        localStorage.removeItem(TESTER_UNLIMITED_KEY);
+        localStorage.removeItem(ENDLESS_SAVE_KEY);
+      } catch (error) {
+        showStorageStatus("Could not reset progress", true);
+        console.error("Could not reset Little Box progress:", error);
+        return;
+      }
+      onReset();
+      window.location.reload();
+    });
+  }
+  function connectZoneWaveReset() {
+    const button = document.getElementById("resetZoneWave");
+    if (!button) return;
+    button.addEventListener("click", () => {
+      if (!window.confirm(`Reset Zone ${save.zone} to Wave 1?`)) return;
+      save.continueWave = 1;
+      save.skipStreak = 0;
+      if (!persist()) return;
+      showStorageStatus(`Zone ${save.zone} reset to Wave 1`);
+      renderShop();
+    });
+  }
+  function connectTesterActivation() {
+    const form = document.getElementById("testerActivationForm");
+    if (!form) return;
+    const input = document.getElementById("testerCode");
+    const status = document.getElementById("testerActivationStatus");
+    const arenaLink = document.getElementById("testerArenaLink");
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      if (input.value !== "tester") {
+        status.textContent = "Enter the exact code to enable tester mode.";
+        arenaLink.hidden = true;
+        return;
+      }
+      try {
+        localStorage.setItem(TESTER_KEY, "tester");
+        input.value = "";
+        status.textContent = "Tester mode enabled.";
+        arenaLink.hidden = false;
+      } catch (error) {
+        showStorageStatus("Could not enable tester mode", true);
+        console.error("Could not set the tester activation field:", error);
+      }
+    });
+  }
   function persist() {
     try {
       localStorage.setItem(SAVE_KEY, JSON.stringify(save));
@@ -255,6 +426,49 @@
     }
   }
   loadSave();
+
+  const defaultEndlessSave = () => ({
+    stats: {
+      highWave: 0, wavesCompleted: 0, bossesDefeated: 0, enemiesDefeated: 0,
+      enemiesExited: 0, survivalTime: 0, highestBoss: 0, highestDamage: 0,
+      rewardsEarned: 0, totalEnemiesEncountered: 0
+    },
+    upgrades: {
+      damage: 0, maxHp: 0, movement: 0, fireRate: 0, cooldown: 0,
+      dash: 0, range: 0, critical: 0, shield: 0, healing: 0
+    },
+    cosmetics: []
+  });
+  let endlessSave = defaultEndlessSave();
+  function normalizeEndlessSave(value) {
+    const fresh = defaultEndlessSave();
+    if (!value || typeof value !== "object") return fresh;
+    const stats = { ...fresh.stats, ...(value.stats || {}) };
+    Object.keys(stats).forEach(key => {
+      stats[key] = Number.isFinite(Number(stats[key])) ? Math.max(0, Number(stats[key])) : 0;
+    });
+    const upgrades = { ...fresh.upgrades, ...(value.upgrades || {}) };
+    Object.keys(upgrades).forEach(key => {
+      upgrades[key] = Math.min(10, Math.max(0, Math.floor(Number(upgrades[key]) || 0)));
+    });
+    return { stats, upgrades, cosmetics: Array.isArray(value.cosmetics) ? value.cosmetics : [] };
+  }
+  function persistEndlessSave() {
+    try {
+      localStorage.setItem(ENDLESS_SAVE_KEY, JSON.stringify(endlessSave));
+      return true;
+    } catch (error) {
+      showStorageStatus("Could not save Endless Mode", true);
+      console.error("Could not save Endless Mode progress:", error);
+      return false;
+    }
+  }
+  try {
+    const raw = localStorage.getItem(ENDLESS_SAVE_KEY);
+    if (raw) endlessSave = normalizeEndlessSave(JSON.parse(raw));
+  } catch (error) {
+    console.error("Could not read Endless Mode progress:", error);
+  }
 
   let audioContext;
   let musicGain;
@@ -339,30 +553,70 @@
     });
     document.addEventListener("pointerdown", ensureAudio, { once: true });
   }
+  const navMenuButton = document.getElementById("navMenuButton");
+  const mainNav = document.getElementById("mainNav");
+  if (navMenuButton && mainNav) {
+    const closeMenu = () => {
+      mainNav.classList.remove("open");
+      navMenuButton.setAttribute("aria-expanded", "false");
+      navMenuButton.setAttribute("aria-label", "Open navigation");
+    };
+    navMenuButton.addEventListener("click", () => {
+      const willOpen = !mainNav.classList.contains("open");
+      mainNav.classList.toggle("open", willOpen);
+      navMenuButton.setAttribute("aria-expanded", String(willOpen));
+      navMenuButton.setAttribute("aria-label", willOpen ? "Close navigation" : "Open navigation");
+    });
+    mainNav.querySelectorAll("a").forEach(link => link.addEventListener("click", closeMenu));
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeMenu();
+    });
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 720) closeMenu();
+    });
+  }
   connectVolumeControls();
+  connectTesterActivation();
   if (document.body.dataset.page === "shop") {
+    connectResetButton();
+    connectZoneWaveReset();
     musicIntensity = 0.1;
     updateMusic();
     renderShop();
+  } else if (document.body.dataset.page === "endless") {
+    musicIntensity = 0.1;
+    updateMusic();
+    const s = endlessSave.stats;
+    const setText = (id, value) => { const element = document.getElementById(id); if (element) element.textContent = value; };
+    setText("endlessHighWave", s.highWave);
+    setText("endlessBosses", s.bossesDefeated);
+    setText("endlessEncountered", s.totalEnemiesEncountered);
+    setText("endlessWaves", s.wavesCompleted);
+    setText("endlessExited", s.enemiesExited);
+    setText("endlessTime", `${Math.floor(s.survivalTime)}s`);
+    setText("endlessRewards", s.rewardsEarned);
+    setText("endlessCosmetics", endlessSave.cosmetics.length ? endlessSave.cosmetics.join(", ") : "None yet");
+    const play = document.getElementById("playEndless");
+    if (play) play.addEventListener("click", () => { window.location.href = "index.html?mode=endless"; });
   } else {
     initGame();
   }
 
   function upgradeNodeMarkup(upgrade, isAutoDodge = false) {
     const level = save.upgrades[upgrade.id] || 0;
-    const maxLevel = isAutoDodge ? 1 : 5;
+    const maxLevel = isAutoDodge ? 1 : upgrade.maxLevel || 5;
     const mergerTokens = save.currencies.merger || 0;
     const locked = isAutoDodge
       ? mergerTokens < 10 && level === 0
       : !upgrade.requires.every(id => (save.upgrades[id] || 0) > 0);
     const currency = ENEMY_BY_ID[upgrade.currency] || BOSS_CURRENCY.find(item => item.id === upgrade.currency);
     const cost = isAutoDodge ? upgrade.cost : upgrade.cost * (level + 1);
-    const canBuy = !locked && level < maxLevel && (save.currencies[upgrade.currency] || 0) >= cost;
+    const canBuy = !locked && level < maxLevel && canAfford(upgrade.currency, cost);
     const state = locked ? "locked" : level > 0 ? "owned" : canBuy ? "affordable" : "";
     const name = isAutoDodge ? "Auto-dodge" : upgrade.name;
     const mark = locked ? "?" : currency.icon;
     const levelText = locked ? "LOCKED" : isAutoDodge ? (level ? "INSTALLED" : "NOT OWNED") : `LV ${level} / ${maxLevel}`;
-    const costText = locked ? "???" : level >= maxLevel ? "MAXED" : `${currency.icon} ${cost}`;
+    const costText = level >= maxLevel ? "MAXED" : `${cost} ${currency.name}`;
     const label = locked ? "Unknown upgrade" : `${name}, ${levelText}, ${costText}`;
     return `<div class="upgrade-node-shell ${state}${selectedUpgradeId === upgrade.id ? " selected" : ""}">
       <button class="upgrade-node" type="button" data-select-upgrade="${upgrade.id}" aria-label="${label}" aria-pressed="${selectedUpgradeId === upgrade.id}">
@@ -379,7 +633,7 @@
     if (!details) return;
     const upgrade = selectedUpgradeId === "autoDodge"
       ? AUTO_DODGE_UPGRADE
-      : UPGRADE_GROUPS.flatMap(group => group.upgrades).find(item => item.id === selectedUpgradeId);
+      : ALL_UPGRADE_GROUPS.flatMap(group => group.upgrades).find(item => item.id === selectedUpgradeId);
     if (!upgrade) return;
 
     if (upgrade.id === "autoDodge") {
@@ -387,7 +641,7 @@
       const mergerTokens = save.currencies.merger || 0;
       const chaserTokens = save.currencies.chaser || 0;
       const unlocked = mergerTokens >= 10;
-      const canBuy = unlocked && level === 0 && chaserTokens >= AUTO_DODGE_UPGRADE.cost;
+      const canBuy = unlocked && level === 0 && canAfford("chaser", AUTO_DODGE_UPGRADE.cost);
       details.innerHTML = `<div class="upgrade-detail-copy">
         <p class="eyebrow">SPECIAL MECHANIC</p>
         <h3>Auto-dodge</h3>
@@ -401,17 +655,23 @@
       const visible = prereqs.every(id => (save.upgrades[id] || 0) > 0);
       const currency = ENEMY_BY_ID[upgrade.currency] || BOSS_CURRENCY.find(item => item.id === upgrade.currency);
       const cost = upgrade.cost * (level + 1);
-      const canBuy = visible && level < 5 && (save.currencies[upgrade.currency] || 0) >= cost;
+      const maxLevel = upgrade.maxLevel || 5;
+      const canBuy = visible && level < maxLevel && canAfford(upgrade.currency, cost);
+      const balance = save.currencies[upgrade.currency] || 0;
+      const balanceText = isUnlimitedResources() ? "∞" : balance;
       const requirement = visible
-        ? `${currency.icon} ${cost} ${currency.name} tokens · You have ${save.currencies[upgrade.currency] || 0}`
+        ? canAfford(upgrade.currency, cost)
+          ? `${currency.icon} ${cost} ${currency.name} tokens · You have ${balanceText}`
+          : `Need ${cost} ${currency.name} tokens · You have ${balanceText}`
         : `Requires ${prereqs.map(id => UPGRADES.find(item => item.id === id).name).join(", ")} first`;
+      const group = ALL_UPGRADE_GROUPS.find(item => item.upgrades.includes(upgrade));
       details.innerHTML = `<div class="upgrade-detail-copy">
-        <p class="eyebrow">${UPGRADE_GROUPS.find(group => group.upgrades.includes(upgrade)).name.toUpperCase()}</p>
-        <h3>${upgrade.name} <span class="level-text">LV ${level} / 5</span></h3>
+        <p class="eyebrow">${group.name.toUpperCase()}</p>
+        <h3>${upgrade.name} <span class="level-text">LV ${level} / ${maxLevel}</span></h3>
         <p>${upgrade.description}${prereqs.length ? ` Requires: ${prereqs.map(id => UPGRADES.find(item => item.id === id).name).join(", ")}.` : ""}</p>
-        <span class="upgrade-detail-cost">${visible ? level >= 5 ? "MAX LEVEL" : requirement : requirement}</span>
+        <span class="upgrade-detail-cost">${visible ? level >= maxLevel ? "MAX LEVEL" : requirement : requirement}</span>
       </div>
-      <button class="button" type="button" data-buy="${upgrade.id}" ${canBuy ? "" : "disabled"}>${level >= 5 ? "Maxed" : visible ? "Upgrade" : "Locked"}</button>`;
+      <button class="button" type="button" data-buy="${upgrade.id}" ${canBuy ? "" : "disabled"}>${level >= maxLevel ? "Maxed" : visible ? "Upgrade" : "Locked"}</button>`;
     }
 
     details.onclick = event => {
@@ -421,13 +681,14 @@
       }
       const button = event.target.closest("[data-buy]");
       if (!button || button.disabled) return;
-      const purchasedUpgrade = UPGRADE_GROUPS.flatMap(group => group.upgrades).find(item => item.id === button.dataset.buy);
+      const purchasedUpgrade = ALL_UPGRADE_GROUPS.flatMap(group => group.upgrades).find(item => item.id === button.dataset.buy);
       if (!purchasedUpgrade) return;
       const level = save.upgrades[purchasedUpgrade.id] || 0;
       const cost = purchasedUpgrade.cost * (level + 1);
-      if (level >= 5 || (save.currencies[purchasedUpgrade.currency] || 0) < cost
+      const maxLevel = purchasedUpgrade.maxLevel || 5;
+      if (level >= maxLevel || !canAfford(purchasedUpgrade.currency, cost)
         || !purchasedUpgrade.requires.every(id => save.upgrades[id] > 0)) return;
-      save.currencies[purchasedUpgrade.currency] -= cost;
+      if (!spendCurrency(purchasedUpgrade.currency, cost)) return;
       save.upgrades[purchasedUpgrade.id] = level + 1;
       if (purchasedUpgrade.id === "maxHealth" && save.currentHp > 0) save.currentHp = Math.min(save.currentHp, 3 + save.upgrades.maxHealth);
       persist();
@@ -440,7 +701,7 @@
     const upgradeGroups = document.getElementById("upgradeGroups");
     const purchased = UPGRADES.filter(upgrade => (save.upgrades[upgrade.id] || 0) > 0).length;
     upgradeGroups.innerHTML = `<div class="upgrade-root"><div class="upgrade-core"><span>THE LITTLE BOX</span><strong>UPGRADE CORE</strong><small>${purchased} / ${UPGRADES.length} NODES OWNED</small></div></div>
-      <div class="upgrade-branches">${UPGRADE_GROUPS.map(group => {
+      <div class="upgrade-branches">${ALL_UPGRADE_GROUPS.map(group => {
         const nodes = group.upgrades.map(upgrade => upgradeNodeMarkup(upgrade)).join("");
         const autoDodge = group.name === "Special mechanics" ? upgradeNodeMarkup(AUTO_DODGE_UPGRADE, true) : "";
         return `<section class="upgrade-branch"><h3>${group.name}</h3><div class="upgrade-node-stack">${nodes}${autoDodge}</div></section>`;
@@ -455,13 +716,14 @@
         button.setAttribute("aria-pressed", String(button.dataset.selectUpgrade === selectedUpgradeId));
       });
       renderUpgradeDetails();
+      document.getElementById("upgradeDetails").scrollIntoView({ behavior: "smooth", block: "center" });
     };
     renderUpgradeDetails();
   }
 
   function buyAutoDodge() {
-    if ((save.currencies.merger || 0) < 10 || (save.currencies.chaser || 0) < AUTO_DODGE_UPGRADE.cost || save.upgrades.autoDodge > 0) return;
-    save.currencies.chaser -= AUTO_DODGE_UPGRADE.cost;
+    if ((save.currencies.merger || 0) < 10 || !canAfford("chaser", AUTO_DODGE_UPGRADE.cost) || save.upgrades.autoDodge > 0) return;
+    if (!spendCurrency("chaser", AUTO_DODGE_UPGRADE.cost)) return;
     save.upgrades.autoDodge = 1;
     save.autoDodgeEnabled = true;
     persist();
@@ -472,8 +734,8 @@
     const currencyList = document.getElementById("currencyList");
     currencyList.innerHTML = CURRENCIES.map(currency => `
       <div class="currency-card">
-        <span class="currency-icon">${save.discovered.includes(currency.id) ? currency.icon : "?"}</span>
-        <div><strong>${save.discovered.includes(currency.id) ? (save.currencies[currency.id] || 0) : "???"}</strong><span>${save.discovered.includes(currency.id) ? `${currency.name} tokens` : "??? tokens"}</span></div>
+        <span class="currency-icon">${currency.icon}</span>
+        <div><strong>${save.currencies[currency.id] || 0}</strong><span>${currency.name} tokens</span></div>
       </div>`).join("");
 
     renderUpgradeTree();
@@ -601,15 +863,34 @@
     const overlayButtons = document.getElementById("overlayButtons");
     const autoDodgeSetting = document.getElementById("autoDodgeSetting");
     const autoDodgeToggle = document.getElementById("autoDodgeToggle");
-    const player = { x: 400, y: 440, vx: 0, vy: 0, hp: 3, maxHp: 3, radius: 28, invulnerable: 0, dashTime: 0, dashCooldown: 0, pulseCooldown: 0, deflectionCooldown: 0, phaseCooldown: 0, slowCooldown: 0, shieldHits: 0, livesUsed: 0, slowTime: 0, slowedTime: 0, phaseTime: 0, poisonTime: 0, poisonTick: 0, touchTarget: null };
-    const run = { state: "idle", wave: save.continueWave, zone: save.zone, paused: false, clock: 0, waveSpawns: [], transitionTimer: 0, enemies: [], shots: [], boss: null, bossAttack: 0, bossAttackStep: 0, bossTell: null, rapidShots: 0, rapidClock: 0, toastTimer: 0, rebind: null };
+    const player = { x: 400, y: 440, vx: 0, vy: 0, hp: 3, maxHp: 3, radius: 28, invulnerable: 0, adminInvincible: false, attackCooldown: 0, dashTime: 0, dashCooldown: 0, pulseCooldown: 0, deflectionCooldown: 0, phaseCooldown: 0, slowCooldown: 0, shieldHits: 0, livesUsed: 0, slowTime: 0, slowedTime: 0, phaseTime: 0, poisonTime: 0, poisonTick: 0, touchTarget: null };
+    const run = { mode: "campaign", state: "idle", wave: save.continueWave, zone: save.zone, paused: false, clock: 0, waveSpawns: [], transitionTimer: 0, enemies: [], shots: [], boss: null, bossAttack: 0, bossAttackStep: 0, bossTell: null, bossLaser: null, hazards: [], rapidShots: 0, rapidClock: 0, toastTimer: 0, rebind: null, bossEnabled: true, difficultyScaling: true, spawnRateScale: 1, maxEnemiesScale: 1, adminBossHp: null, endlessSkipStreak: 0 };
     const held = new Set();
     let lastFrame = 0;
     let animationId = 0;
     let skipPagehideSave = false;
-    let testerMode = false;
-    let testerCodeInput = "";
-    let testerSpeedMultiplier = 1;
+    const testerMode = testerActivationEnabled();
+    let gameSpeedMultiplier = 1;
+    let currentFps = 0;
+    let fpsFrames = 0;
+    let fpsElapsed = 0;
+    let adminMaxHp = null;
+    let testerBaseline = null;
+    connectResetButton(() => {
+      skipPagehideSave = true;
+      setAdminPanelOpen(false);
+    });
+    if (testerMode) {
+      try {
+        const backup = localStorage.getItem(TESTER_BACKUP_KEY);
+        testerBaseline = backup ? normalizeSave(JSON.parse(backup)) : JSON.parse(JSON.stringify(save));
+        if (!backup) localStorage.setItem(TESTER_BACKUP_KEY, JSON.stringify(testerBaseline));
+      } catch (error) {
+        showStorageStatus("Tester backup unavailable", true);
+        console.error("Could not preserve the pre-test save:", error);
+        testerBaseline = JSON.parse(JSON.stringify(save));
+      }
+    }
 
     function currentZone() { return ZONES.find(zone => zone.id === run.zone) || ZONES[0]; }
     function upgradeLevel(id) { return save.upgrades[id] || 0; }
@@ -653,8 +934,273 @@
       toast.classList.add("show");
       run.toastTimer = 1.6;
     }
+    const adminToggle = document.getElementById("adminToggle");
+    const adminPanel = document.getElementById("adminPanel");
+    let updateAdminStats = () => {};
+    function setAdminPanelOpen(isOpen) {
+      try {
+        if (isOpen) sessionStorage.setItem(ADMIN_PANEL_KEY, "true");
+        else sessionStorage.removeItem(ADMIN_PANEL_KEY);
+      } catch (error) {
+        showStorageStatus("Could not save Admin Panel state", true);
+        console.error("Could not save Admin Panel state:", error);
+      }
+    }
+    function openAdminPanel() {
+      if (!testerMode || !adminPanel) return;
+      document.getElementById("adminCurrentHp").value = String(player.hp);
+      document.getElementById("adminMaxHp").value = String(player.maxHp);
+      adminPanel.hidden = false;
+      setAdminPanelOpen(true);
+    }
+    if (adminToggle && adminPanel && testerMode) {
+      adminToggle.hidden = false;
+      const spawnSelect = document.getElementById("adminSpawnType");
+      spawnSelect.innerHTML = `<optgroup label="Regular and merged enemies">${ENEMIES.filter(enemy => !enemy.id.startsWith("boss")).map(enemy => `<option value="${enemy.id}">${enemy.name} · Zone ${enemy.zone}</option>`).join("")}</optgroup><optgroup label="Bosses">${ENEMIES.filter(enemy => enemy.id.startsWith("boss")).map(enemy => `<option value="${enemy.id}">${enemy.name}</option>`).join("")}</optgroup>`;
+      const spawnQuantity = document.getElementById("adminSpawnQuantity");
+      spawnSelect.addEventListener("change", () => {
+        const isBoss = spawnSelect.value.startsWith("boss");
+        spawnQuantity.disabled = isBoss;
+        spawnQuantity.max = isBoss ? "1" : "60";
+        if (isBoss) spawnQuantity.value = "1";
+      });
+      document.getElementById("adminCurrency").innerHTML = CURRENCIES.map(currency => `<option value="${currency.id}">${currency.name} tokens</option>`).join("");
+      document.getElementById("adminZone").innerHTML = ZONES.map(zone => `<option value="${zone.id}">Zone ${zone.id} · ${zone.name}</option>`).join("");
+      document.getElementById("adminWave").innerHTML = Array.from({ length: 10 }, (_, index) => `<option value="${index + 1}">Wave ${index + 1}</option>`).join("");
+      document.getElementById("adminMergeType").innerHTML = MERGES.map(recipe => `<option value="${recipe.result}">${ENEMY_BY_ID[recipe.result].name}</option>`).join("");
+      adminToggle.addEventListener("click", openAdminPanel);
+      document.getElementById("adminClose").addEventListener("click", () => {
+        adminPanel.hidden = true;
+        setAdminPanelOpen(false);
+      });
+      try {
+        if (sessionStorage.getItem(ADMIN_PANEL_KEY) === "true") openAdminPanel();
+      } catch (error) {
+        showStorageStatus("Could not restore Admin Panel state", true);
+        console.error("Could not restore Admin Panel state:", error);
+      }
+      document.getElementById("adminGameSpeed").addEventListener("change", event => {
+        gameSpeedMultiplier = Number(event.target.value);
+        announce(`Game speed ${gameSpeedMultiplier}×`);
+      });
+      const adminNumber = id => Number(document.getElementById(id).value);
+      const ensureAdminWave = () => {
+        if (["idle", "victory", "defeat"].includes(run.state)) startWave(save.continueWave, save.zone, true, true);
+        run.paused = false;
+        hideOverlay();
+      };
+      const setAdminCurrency = value => {
+        const currency = document.getElementById("adminCurrency").value;
+        save.currencies[currency] = Math.max(0, Math.floor(value));
+        persist();
+      };
+      updateAdminStats = () => {
+        const id = spawnSelect.value;
+        const data = ENEMY_BY_ID[id];
+        const enemy = run.enemies.find(item => item.id === id);
+        const boss = run.boss && `boss${run.zone}` === id ? run.boss : null;
+        const hp = boss ? `${boss.hp.toFixed(1)} / ${boss.maxHp}` : enemy ? `${enemy.health.toFixed(1)} / ${enemy.maxHealth}` : data.hp;
+        const speed = enemy ? Math.hypot(enemy.vx, enemy.vy).toFixed(1) : boss ? boss.speed : data.speed;
+        document.getElementById("adminStats").textContent =
+          `${data.name} (${id})\nHP: ${hp}\nSpeed: ${speed}\nContact damage: ${data.damage}\nPattern: ${data.pattern} · Radius: ${data.size}\nZone ${run.zone}, wave ${run.wave} · State: ${run.paused ? "paused" : run.state}\nEnemies: ${run.enemies.length} · Projectiles: ${run.shots.length} · FPS: ${currentFps}`;
+      };
+      adminPanel.addEventListener("click", event => {
+        const button = event.target.closest("[data-admin-action]");
+        if (!button) return;
+        const action = button.dataset.adminAction;
+        const selected = spawnSelect.value;
+        if (action === "spawn") {
+          ensureAdminWave();
+          const count = Math.max(1, Math.min(60, Math.floor(adminNumber("adminSpawnQuantity") || 1)));
+          if (selected.startsWith("boss")) {
+            const zoneId = Number(selected.slice(4));
+            startWave(10, zoneId, true);
+            startBoss();
+            const location = document.getElementById("adminSpawnLocation").value;
+            if (location === "center") { run.boss.x = 400; run.boss.y = 400; }
+            if (location === "player") { run.boss.x = player.x + 100; run.boss.y = player.y; }
+            if (location === "coordinates") { run.boss.x = adminNumber("adminSpawnX"); run.boss.y = adminNumber("adminSpawnY"); }
+            if (location === "edge") {
+              const edge = Math.floor(Math.random() * 4);
+              run.boss.x = edge === 0 || edge === 2 ? 400 : edge === 1 ? 700 : 100;
+              run.boss.y = edge === 1 || edge === 3 ? 400 : edge === 0 ? 100 : 700;
+            }
+            announce(`${ENEMY_BY_ID[selected].name} spawned`);
+          } else {
+            for (let index = 0; index < count; index++) {
+              spawnEnemy(selected);
+              const enemy = run.enemies[run.enemies.length - 1];
+              const location = document.getElementById("adminSpawnLocation").value;
+              if (location === "center") { enemy.x = 400; enemy.y = 400; }
+              if (location === "player") { enemy.x = Math.max(20, Math.min(780, player.x + 60)); enemy.y = player.y; }
+              if (location === "coordinates") { enemy.x = Math.max(20, Math.min(780, adminNumber("adminSpawnX"))); enemy.y = Math.max(20, Math.min(780, adminNumber("adminSpawnY"))); }
+            }
+            announce(`${count} ${ENEMY_BY_ID[selected].name} spawned`);
+          }
+        } else if (action === "remove-enemies") {
+          run.enemies = [];
+          run.shots = [];
+          run.boss = null;
+          run.bossLaser = null;
+          announce("All enemies removed");
+        } else if (action === "set-currency" || action === "add-currency" || action === "subtract-currency") {
+          const value = Math.max(0, Math.floor(adminNumber("adminResourceAmount") || 0));
+          const currency = document.getElementById("adminCurrency").value;
+          if (action === "set-currency") setAdminCurrency(value);
+          else setAdminCurrency((save.currencies[currency] || 0) + (action === "add-currency" ? value : -value));
+          announce(`${ENEMY_BY_ID[currency]?.name || currency} tokens updated`);
+        } else if (action === "unlock-currencies") {
+          save.discovered = [...new Set([...save.discovered, ...CURRENCIES.map(currency => currency.id)])];
+          persist();
+          announce("All currencies unlocked");
+        } else if (action === "unlimited-on" || action === "unlimited-off") {
+          try { localStorage.setItem(TESTER_UNLIMITED_KEY, action === "unlimited-on" ? "true" : "false"); }
+          catch (error) { showStorageStatus("Could not change unlimited resources", true); console.error("Could not update tester resources:", error); return; }
+          renderShopIfOpen();
+          announce(action === "unlimited-on" ? "Unlimited resources enabled" : "Unlimited resources disabled");
+        } else if (action === "set-current-hp") {
+          player.hp = Math.max(0, adminNumber("adminCurrentHp") || 0);
+          save.currentHp = player.hp;
+          persist();
+        } else if (action === "set-max-hp") {
+          adminMaxHp = Math.max(1, adminNumber("adminMaxHp") || 1);
+          player.maxHp = adminMaxHp;
+          persist();
+        } else if (action === "max-hp" || action === "restore-health") {
+          player.hp = player.maxHp;
+          save.currentHp = player.hp;
+          persist();
+        } else if (action === "invincible-on" || action === "invincible-off") {
+          player.adminInvincible = action === "invincible-on";
+          announce(player.adminInvincible ? "Invincibility enabled" : "Invincibility disabled");
+        } else if (action === "teleport") {
+          player.x = Math.max(player.radius, Math.min(800 - player.radius, adminNumber("adminSpawnX")));
+          player.y = Math.max(player.radius, Math.min(800 - player.radius, adminNumber("adminSpawnY")));
+          player.vx = 0;
+          player.vy = 0;
+        } else if (action === "reset-position") {
+          player.x = 400; player.y = 440; player.vx = 0; player.vy = 0;
+        } else if (action === "jump-zone" || action === "start-wave") {
+          const zone = Number(document.getElementById("adminZone").value);
+          const wave = Number(document.getElementById("adminWave").value);
+          save.zone = zone;
+          save.continueWave = wave;
+          if (action === "jump-zone") startWave(1, zone, true);
+          else startWave(wave, zone, true);
+        } else if (action === "skip-wave") {
+          ensureAdminWave();
+          run.waveSpawns = [];
+          if (run.wave >= 9) startWave(10, run.zone, true);
+          else startWave(run.wave + 1, run.zone, true);
+        } else if (action === "complete-wave") {
+          if (run.wave >= 10 || run.boss) winBoss();
+          else { run.waveSpawns = []; run.enemies = []; run.shots = []; completeWave(); }
+        } else if (action === "unlock-zones") {
+          save.unlockedZone = ZONES.length; persist(); announce("All zones unlocked");
+        } else if (action === "unlock-index") {
+          save.discovered = ENEMIES.map(enemy => enemy.id); persist(); announce("Enemy index unlocked");
+        } else if (action === "unlock-merged") {
+          const mergedIds = MERGES.map(recipe => recipe.result);
+          save.discovered = [...new Set([...save.discovered, ...mergedIds])]; persist(); announce("Merged enemies unlocked");
+        } else if (action === "unlock-upgrades") {
+          UPGRADES.forEach(upgrade => { save.upgrades[upgrade.id] = upgrade.maxLevel || (upgrade.id === "autoDodge" ? 1 : 5); });
+          player.maxHp = adminMaxHp || maxHealth();
+          player.hp = Math.min(player.hp, player.maxHp);
+          save.currentHp = player.hp;
+          persist();
+          announce("All upgrades unlocked");
+        } else if (action === "reset-waves") {
+          save.zone = 1; save.continueWave = 1; save.skipStreak = 0; save.unlockedZone = 1;
+          run.zone = 1; run.wave = 1; run.state = "idle"; run.enemies = []; run.shots = []; run.waveSpawns = []; run.boss = null;
+          save.currentHp = player.hp = maxHealth();
+          persist(); mainMenu(); announce("Wave progression reset");
+        } else if (action === "projectile") {
+          ensureAdminWave();
+          if (!run.boss) startBoss();
+          fire(player.x, player.y, run.boss.x, run.boss.y, 560, "#78f0c2", { owner: "player", damage: 8, radius: 7 });
+          announce("Player projectile fired");
+        } else if (action === "enemy-ability") {
+          ensureAdminWave();
+          if (!selected.startsWith("boss")) spawnEnemy(selected);
+          else { startWave(10, Number(selected.slice(4)), true); startBoss(); }
+          announce(`${ENEMY_BY_ID[selected].name} ability active`);
+        } else if (action === "merge-test") {
+          ensureAdminWave();
+          const recipe = MERGES.find(item => item.result === document.getElementById("adminMergeType").value);
+          save.unlockedZone = Math.max(save.unlockedZone, recipe.zone);
+          run.zone = recipe.zone; run.wave = recipe.wave;
+          spawnEnemy(recipe.a); run.enemies[run.enemies.length - 1].x = 390; run.enemies[run.enemies.length - 1].y = 400;
+          spawnEnemy(recipe.b); run.enemies[run.enemies.length - 1].x = 410; run.enemies[run.enemies.length - 1].y = 400;
+          mergeEnemies(); persist(); announce(`${ENEMY_BY_ID[recipe.result].name} merge tested`);
+        } else if (action === "boss-attack") {
+          ensureAdminWave();
+          if (!run.boss) { startWave(10, run.zone, true); startBoss(); }
+          run.bossTellTarget = { x: player.x, y: player.y };
+          run.bossTell = { type: "laser", time: 1.15 };
+          run.bossAttack = 5;
+          announce("Boss laser attack queued");
+        } else if (action === "pause") {
+          if (run.paused) resumeGame(); else pauseGame();
+        } else if (action === "reset-scenario") {
+          run.enemies = []; run.shots = []; run.boss = null; run.bossTell = null; run.bossLaser = null; run.hazards = [];
+          player.x = 400; player.y = 440; player.vx = 0; player.vy = 0; player.hp = player.maxHp;
+          save.currentHp = player.hp; persist(); announce("Test scenario reset");
+        } else if (action === "show-stats") updateAdminStats();
+        else if (action === "endless-start") {
+          run.adminBossHp = Math.max(10, adminNumber("adminEndlessBossHp") || 60);
+          run.spawnRateScale = Math.max(0.5, Math.min(3, adminNumber("adminSpawnRateScale") || 1));
+          run.maxEnemiesScale = Math.max(0.5, Math.min(2, adminNumber("adminMaxEnemyScale") || 1));
+          startEndlessWave(Math.max(1, adminNumber("adminEndlessWave") || 1));
+          announce("Endless run started");
+        } else if (action === "endless-boss") {
+          ensureAdminWave();
+          if (run.mode !== "endless") startEndlessWave(Math.max(1, adminNumber("adminEndlessWave") || 1));
+          run.adminBossHp = Math.max(10, adminNumber("adminEndlessBossHp") || 60);
+          startEndlessBoss();
+        } else if (action === "endless-boss-off" || action === "endless-boss-on") {
+          run.bossEnabled = action === "endless-boss-on";
+          announce(run.bossEnabled ? "Endless bosses enabled" : "Endless bosses disabled");
+        } else if (action === "endless-scale-off" || action === "endless-scale-on") {
+          run.difficultyScaling = action === "endless-scale-on";
+          run.spawnRateScale = Math.max(0.5, Math.min(3, adminNumber("adminSpawnRateScale") || 1));
+          run.maxEnemiesScale = Math.max(0.5, Math.min(2, adminNumber("adminMaxEnemyScale") || 1));
+          announce(run.difficultyScaling ? "Endless scaling enabled" : "Endless scaling disabled");
+        } else if (action === "endless-complete") {
+          ensureAdminWave();
+          if (run.mode === "endless") {
+            run.boss = null;
+            run.enemies = [];
+            run.shots = [];
+            run._endlessBossDefeated = true;
+            completeEndlessWave();
+          }
+        } else if (action === "exit-tester") {
+          if (!window.confirm("Exit testing mode and restore the save from before testing?")) return;
+          try {
+            if (testerBaseline) save = normalizeSave(testerBaseline);
+            if (!persist()) return;
+            localStorage.removeItem(TESTER_KEY);
+            localStorage.removeItem(TESTER_BACKUP_KEY);
+            localStorage.removeItem(TESTER_UNLIMITED_KEY);
+            setAdminPanelOpen(false);
+          } catch (error) {
+            showStorageStatus("Could not exit tester mode", true);
+            console.error("Could not restore the normal save:", error);
+            return;
+          }
+          skipPagehideSave = true;
+          window.location.reload();
+        }
+        drawHud();
+        updateAdminStats();
+      });
+    } else if (adminToggle) adminToggle.hidden = true;
+    function renderShopIfOpen() {
+      if (document.body.dataset.page === "shop") renderShop();
+    }
     function drawHud() {
-      document.getElementById("waveLabel").textContent = `${run.zone} · ${run.wave} / 10`;
+      document.getElementById("waveLabel").textContent = run.mode === "endless" ? `ENDLESS · WAVE ${run.wave}` : `${run.zone} · ${run.wave} / 10`;
+      document.getElementById("zoneHeading").textContent = run.mode === "endless" ? "ENDLESS MODE · NO FINAL WAVE" : `ZONE ${String(run.zone).padStart(2, "0")} · ${currentZone().name.toUpperCase()}`;
       const healthRatio = Math.max(0, player.hp / player.maxHp);
       document.getElementById("healthFill").style.width = `${healthRatio * 100}%`;
       document.getElementById("healthLabel").textContent = `${Math.ceil(player.hp)} / ${player.maxHp}`;
@@ -673,12 +1219,13 @@
       const abilityHud = document.getElementById("abilityHud");
       abilityHud.innerHTML = [
         ["skipWave", `Skip ${save.skipStreak}/3`, null], ["dash", "Dash", "dash"], ["slowMotion", "Slow", "slowMotion"],
-        ["energyPulse", "Pulse", "energyPulse"], ["deflection", "Deflect", "deflection"], ["phaseShift", "Phase", "phaseShift"]
+        ["attack", "Attack", null], ["energyPulse", "Pulse", "energyPulse"], ["deflection", "Deflect", "deflection"], ["phaseShift", "Phase", "phaseShift"]
       ].filter(item => item[2] === null || upgradeLevel(item[2]) > 0)
         .map(item => `<span><kbd>${formatKey(save.keybinds[item[0]])}</kbd> ${item[1]}</span>`).join("") || "<span>Unlock abilities in the upgrade tree</span>";
       document.getElementById("skipKeyHint").textContent = formatKey(save.keybinds.skipWave);
+      document.getElementById("attackKeyHint").textContent = formatKey(save.keybinds.attack);
     }
-    function startWave(wave = run.wave, zone = run.zone, refill = false) {
+    function startWave(wave = run.wave, zone = run.zone, refill = false, restoreStack = false) {
       ensureAudio();
       run.zone = zone;
       save.zone = zone;
@@ -689,15 +1236,21 @@
       run.clock = 0;
       run.countdown = 2.5;
       run.waveSpawns = [];
-      if (run.wave < 10) addWaveSpawner(run.wave);
+      const firstStackedWave = restoreStack ? Math.max(1, run.wave - save.skipStreak) : run.wave;
+      for (let stackedWave = firstStackedWave; stackedWave <= run.wave && stackedWave < 10; stackedWave++) {
+        addWaveSpawner(stackedWave);
+      }
       run.enemies = [];
       run.shots = [];
       run.boss = null;
       run.bossTell = null;
+      run.bossLaser = null;
+      run.hazards = [];
       run.bossAttack = 1.2;
       run.bossAttackStep = 0;
       run.rapidShots = 0;
       player.maxHp = maxHealth();
+      if (testerMode && adminMaxHp !== null) player.maxHp = adminMaxHp;
       player.hp = refill || save.currentHp <= 0 ? player.maxHp : Math.min(player.maxHp, save.currentHp);
       player.x = 400;
       player.y = 440;
@@ -717,6 +1270,7 @@
       player.phaseTime = 0;
       player.poisonTime = 0;
       player.poisonTick = 0;
+      player.attackCooldown = 0;
       save.currentHp = player.hp;
       save.continueWave = run.wave;
       persist();
@@ -729,10 +1283,10 @@
       const buttons = [
         { label: "Resume", action: resumeGame },
         { label: "How to Play", action: () => showHowToPlay(showPauseMenu), secondary: true },
-        { label: "Restart wave", action: () => startWave(run.wave, run.zone), secondary: true },
+        { label: "Restart wave", action: () => startWave(run.wave, run.zone, false, true), secondary: true },
         { label: "Main menu", action: mainMenu, secondary: true }
       ];
-      if (testerMode) buttons.splice(3, 0, { label: "Tester Tools", action: () => showTesterTools(showPauseMenu), secondary: true });
+      if (testerMode) buttons.splice(3, 0, { label: "Admin Panel", action: openAdminPanel, secondary: true });
       showOverlay("Paused", "Everything is still. Take a breath before going back in.", buttons, "PAUSE MENU");
     }
     function pauseGame() {
@@ -798,79 +1352,14 @@
     function showHowToPlay(backAction) {
       const extra = document.createElement("div");
       extra.className = "guide-copy";
-      extra.textContent = `Move with WASD or the arrow keys; on touch screens, drag inside the arena. Stot moves quickly toward your spawn-time position, never shoots, and exits shortly after arrival. Merger appears in Zone 3 Wave 5 and wanders; touching it triggers the nearest compatible merge. Merge Repulser also triggers merges on contact. Five Stot tokens buy an extra heart. Collect 10 Merger tokens to unlock the Merge Lab, then spend 200 Chaser tokens to unlock Auto-dodge. Toggle Auto-dodge in Settings & audio to turn its threat avoidance off or on. Dodge other contact attacks, warning lines, blasts, and enemy projectiles. Survive ten waves per zone; older enemy types stay in the spawn pool as you progress. Use ${formatKey(save.keybinds.dash)} to dash; ${formatKey(save.keybinds.slowMotion)} slows time, ${formatKey(save.keybinds.energyPulse)} pulses nearby threats, ${formatKey(save.keybinds.deflection)} deflects projectiles, and ${formatKey(save.keybinds.phaseShift)} activates phase shift when each ability is unlocked. Press ${formatKey(save.keybinds.skipWave)} during a regular wave to start the next wave without removing the current wave's enemies or spawns; up to three waves can overlap. A full clear resets the skip limit. Boss waves cannot be skipped. Press ${formatKey(save.keybinds.pause)} or the Pause button to pause; the game also pauses when you leave the tab. Bosses are only damaged by their own projectiles after a shot misses you, bounces off the arena wall, and hits the boss. The shop contains upgrades, the discovered-enemy index, and merge recipes. Health, tokens, upgrades, discoveries, settings, and progress are saved in this browser; use Save code settings to back them up or transfer them.`;
+      extra.textContent = `Move with WASD or the arrow keys; on touch screens, drag inside the arena. Press ${formatKey(save.keybinds.attack)} to fire at the nearest enemy or boss. Stot moves quickly toward your spawn-time position, never shoots, and exits shortly after arrival. Merger appears in Zone 3 Wave 5 and wanders; touching it triggers the nearest compatible merge. Merge Repulser also triggers merges on contact. Five Stot tokens buy an extra heart. Collect 10 Merger tokens to unlock the Merge Lab, then spend 200 Chaser tokens to unlock Auto-dodge. Toggle Auto-dodge in Settings & audio to turn its threat avoidance off or on. Dodge other contact attacks, warning lines, blasts, and enemy projectiles. Survive ten waves per zone; older enemy types stay in the spawn pool as you progress. Use ${formatKey(save.keybinds.dash)} to dash; ${formatKey(save.keybinds.slowMotion)} slows time, ${formatKey(save.keybinds.energyPulse)} pulses nearby threats, ${formatKey(save.keybinds.deflection)} deflects projectiles, and ${formatKey(save.keybinds.phaseShift)} activates phase shift when each ability is unlocked. Press ${formatKey(save.keybinds.skipWave)} during a regular wave to start the next wave without removing the current wave's enemies or spawns; up to three waves can overlap. A full clear resets the skip limit. Boss waves cannot be skipped. Press ${formatKey(save.keybinds.pause)} or the Pause button to pause; the game also pauses when you leave the tab. Boss attacks only hurt the player; use your own projectiles to damage bosses. The shop contains upgrades, the discovered-enemy index, currencies, and merge recipes. Health, tokens, upgrades, discoveries, settings, and progress are saved in this browser; use Save code settings to back them up or transfer them.`;
       showOverlay("How to Play", "", [{ label: "Back", action: backAction, secondary: true }], "GAME GUIDE", extra);
-    }
-    function showTesterTools(backAction) {
-      if (!testerMode) return backAction();
-      showOverlay("Tester Tools", "Tester access and the speed boost last only for this session; progress and upgrades use normal saving.", [
-        { label: "Clear current waves", action: () => {
-          if (["idle", "victory", "defeat"].includes(run.state)) {
-            announce("Start a wave before clearing it");
-            backAction();
-            return;
-          }
-          run.waveSpawns = [];
-          run.enemies = [];
-          run.shots = [];
-          run.paused = false;
-          document.getElementById("pauseButton").textContent = "Pause";
-          if (run.boss || run.wave >= 10) {
-            run.boss = null;
-            winBoss();
-            return;
-          }
-          completeWave();
-          if (backAction === showPauseMenu) {
-            run.paused = true;
-            document.getElementById("pauseButton").textContent = "Resume";
-          }
-          backAction();
-        } },
-        { label: "Full HP + 1.5x speed", action: () => {
-          testerSpeedMultiplier = 1.5;
-          player.maxHp = maxHealth();
-          player.hp = player.maxHp;
-          save.currentHp = player.hp;
-          persist();
-          drawHud();
-          announce("Tester stats applied");
-          backAction();
-        }, secondary: true },
-        { label: "Buy all upgrades", action: () => {
-          UPGRADES.forEach(upgrade => { save.upgrades[upgrade.id] = upgrade.id === "autoDodge" ? 1 : 5; });
-          player.maxHp = maxHealth();
-          player.hp = Math.min(player.hp, player.maxHp);
-          save.currentHp = player.hp;
-          syncAutoDodgeSetting();
-          persist();
-          drawHud();
-          announce("All upgrades unlocked");
-          backAction();
-        }, secondary: true },
-        { label: "Spawn all enemy types", action: () => {
-          const wasIdle = run.state === "idle";
-          if (wasIdle) startWave(save.continueWave, save.zone, true);
-          ENEMIES.filter(enemy => !enemy.id.startsWith("boss")).forEach(enemy => spawnEnemy(enemy.id));
-          announce("Spawned all non-boss enemy types");
-          if (wasIdle) hideOverlay();
-          else backAction();
-        }, secondary: true },
-        { label: "Reveal all question marks", action: () => {
-          save.discovered = ENEMIES.map(enemy => enemy.id);
-          renderMergesIfShop();
-          persist();
-          announce("All discoveries revealed");
-          backAction();
-        }, secondary: true },
-        { label: "Back", action: backAction, secondary: true }
-      ], "TESTER MODE");
     }
     function openKeybindSettings() {
       drawHud();
       const extra = document.createElement("div");
       extra.className = "keybind-list";
-      const labels = { pause: "Pause / resume", dash: "Dash", slowMotion: "Slow motion", energyPulse: "Energy pulse", deflection: "Projectile deflection", phaseShift: "Phase shift", skipWave: "Skip regular wave (max 3 in a row)" };
+      const labels = { pause: "Pause / resume", dash: "Dash", attack: "Fire at enemies / boss", slowMotion: "Slow motion", energyPulse: "Energy pulse", deflection: "Projectile deflection", phaseShift: "Phase shift", skipWave: "Skip regular wave (max 3 in a row)" };
       Object.keys(labels).forEach(id => {
         const row = document.createElement("div");
         row.className = "keybind-row";
@@ -902,6 +1391,163 @@
       ], "CONTROLS", extra);
     }
     function formatKey(key) { return key === " " ? "SPACE" : key.length === 1 ? key.toUpperCase() : key.toUpperCase(); }
+    function endlessEnemyCount(wave) {
+      const counts = [0, 5, 7, 9, 12, 15, 18, 22, 26, 30, 35];
+      if (wave <= 10) return counts[wave];
+      return Math.min(75, 35 + (wave - 10) * Math.ceil(1.25 + wave * 0.015));
+    }
+    function endlessUpgradeLevel(id) { return endlessSave.upgrades[id] || 0; }
+    function endlessMaxHealth() { return 3 + endlessUpgradeLevel("maxHp"); }
+    function endlessEnemyPool(wave) {
+      let pool = ENEMIES.filter(enemy => !enemy.id.startsWith("boss") && enemy.zone <= Math.min(5, 1 + Math.floor(wave / 8)));
+      if (wave >= 5) pool = pool.concat(MERGES.map(recipe => ENEMY_BY_ID[recipe.result]).filter(Boolean));
+      if (wave >= 15 && pool.length > 12) pool = pool.filter(enemy => !["stot", "supportling"].includes(enemy.id));
+      return pool.length ? pool : [ENEMY_BY_ID.chaser];
+    }
+    function persistEndlessRunStats() {
+      endlessSave.stats.highWave = Math.max(endlessSave.stats.highWave, run.wave);
+      persistEndlessSave();
+    }
+    function startEndlessBoss() {
+      if (!run.bossEnabled) return;
+      const base = ENEMY_BY_ID[`boss${Math.min(5, 1 + Math.floor((run.wave - 1) / 10))}`];
+      const variants = ["Armored", "Laser", "Rapid", "Summoner", "Fusion"];
+      const variant = variants[(run.wave - 1) % variants.length];
+      const tier = 1 + Math.floor(run.wave / 10) * 0.16;
+      const hp = run.adminBossHp !== null ? run.adminBossHp : Math.min(1600, Math.ceil((base?.hp || 60) * tier * (1 + run.wave * 0.018)));
+      run.boss = {
+        x: 400, y: 210, radius: 43, hp, maxHp: hp, color: base?.color || "#ff698f",
+        age: 0, speed: Math.min(95, (base?.speedStat || 35) * (variant === "Rapid" ? 1.45 : 1) * tier),
+        variant, endless: true
+      };
+      run.state = "boss";
+      run.bossAttack = 0.65;
+      run.bossAttackStep = 0;
+      run.bossLaser = null;
+      setMusicForWave(10);
+      setStateLabel("ENDLESS BOSS");
+      announce(`${variant} Guardian entered · Wave ${run.wave}`);
+      drawHud();
+    }
+    function startEndlessWave(wave = 1) {
+      ensureAudio();
+      run.mode = "endless";
+      run.wave = Math.max(1, Math.floor(wave));
+      run.state = "countdown";
+      run.paused = false;
+      run.clock = 0;
+      run.countdown = 1.8;
+      run.waveSpawns = [];
+      run.enemies = [];
+      run.shots = [];
+      run.hazards = [];
+      run.boss = null;
+      run.bossLaser = null;
+      run.bossTell = null;
+      const count = endlessEnemyCount(run.wave);
+      run.waveSpawns.push({
+        spawned: 0,
+        total: count,
+        spawnClock: 0.15,
+        candidates: endlessEnemyPool(run.wave).map(enemy => enemy.id)
+      });
+      player.maxHp = endlessMaxHealth();
+      if (testerMode && adminMaxHp !== null) player.maxHp = adminMaxHp;
+      if (player.hp <= 0 || typeof player.hp !== "number") player.hp = player.maxHp;
+      player.hp = Math.min(player.maxHp, Math.max(1, player.hp));
+      player.x = 400;
+      player.y = 440;
+      player.vx = 0;
+      player.vy = 0;
+      player.invulnerable = 1;
+      player.shieldHits = endlessUpgradeLevel("shield");
+      save.currentHp = player.hp;
+      endlessSave.stats.highWave = Math.max(endlessSave.stats.highWave, run.wave);
+      persistEndlessSave();
+      setMusicForWave(Math.min(10, run.wave));
+      setStateLabel("ENDLESS GET READY");
+      drawHud();
+      hideOverlay();
+    }
+    function completeEndlessWave() {
+      endlessSave.stats.wavesCompleted++;
+      const bossDefeated = run._endlessBossDefeated || false;
+      if (!bossDefeated) return;
+      run._endlessBossDefeated = false;
+      run.endlessSkipStreak = 0;
+      const bonus = run.wave >= 100 ? 100 : run.wave >= 50 ? 40 : run.wave >= 30 ? 20 : run.wave >= 20 ? 12 : run.wave >= 10 ? 8 : run.wave >= 5 ? 5 : 2;
+      save.currencies.chaser = (save.currencies.chaser || 0) + bonus;
+      save.currencies.boss5 = (save.currencies.boss5 || 0) + 1;
+      endlessSave.stats.rewardsEarned += bonus + 1;
+      if (run.wave === 10) endlessSave.cosmetics = [...new Set([...endlessSave.cosmetics, "Pulse Trail"])];
+      if (run.wave === 30) endlessSave.cosmetics = [...new Set([...endlessSave.cosmetics, "Void Ring"])];
+      if (run.wave === 50) endlessSave.cosmetics = [...new Set([...endlessSave.cosmetics, "Sovereign Aura"])];
+      if (run.wave === 100) endlessSave.cosmetics = [...new Set([...endlessSave.cosmetics, "Legendary Crown"])];
+      persist();
+      persistEndlessRunStats();
+      run.state = "transition";
+      run.transitionTimer = 1.8;
+      setMusicForWave(0);
+      setStateLabel("WAVE CLEAR");
+      announce(`Endless wave ${run.wave} clear · +${bonus} Chaser`);
+    }
+    function showEndlessMenu() {
+      run.mode = "endless";
+      run.state = "idle";
+      run.paused = false;
+      run.enemies = [];
+      run.shots = [];
+      run.boss = null;
+      setMusicForWave(0);
+      setStateLabel("ENDLESS");
+      const stats = endlessSave.stats;
+      const cosmetics = endlessSave.cosmetics.length ? endlessSave.cosmetics.join(", ") : "None yet";
+      const extra = document.createElement("div");
+      extra.className = "guide-copy";
+      extra.innerHTML = `<strong>High score:</strong> Wave ${stats.highWave}<br><strong>Highest boss:</strong> ${stats.highestBoss}<br><strong>Total enemies encountered:</strong> ${stats.totalEnemiesEncountered}<br><strong>Cosmetics:</strong> ${cosmetics}`;
+      showOverlay("Endless Mode", "Survive an expanding stream of enemies. Every wave contains a boss, and waves continue without limit.", [
+        { label: "Play Endless Mode", action: () => startEndlessWave(stats.highWave > 0 ? 1 : 1) },
+        { label: "Records & achievements", action: showEndlessRecords, secondary: true },
+        { label: "Endless upgrades", action: showEndlessUpgrades, secondary: true },
+        { label: "Back to Main Menu", action: mainMenu, secondary: true }
+      ], "ENDLESS MODE", extra);
+    }
+    function showEndlessRecords() {
+      const s = endlessSave.stats;
+      const extra = document.createElement("div");
+      extra.className = "guide-copy";
+      extra.innerHTML =
+        `Best Wave Reached: ${s.highWave}<br>Highest Boss Defeated: ${s.highestBoss}<br>` +
+        `Total Enemies Encountered: ${s.totalEnemiesEncountered}<br>Total Waves Completed: ${s.wavesCompleted}<br>` +
+        `Bosses Defeated: ${s.bossesDefeated}<br>Enemies Defeated: ${s.enemiesDefeated}<br>Enemies Exited: ${s.enemiesExited}<br>` +
+        `Survival Time: ${Math.floor(s.survivalTime)}s<br>Highest Damage Dealt: ${s.highestDamage}<br>Total Rewards Earned: ${s.rewardsEarned}`;
+      showOverlay("Endless Records", "", [{ label: "Back", action: showEndlessMenu, secondary: true }], "PERSONAL RECORDS", extra);
+    }
+    function showEndlessUpgrades() {
+      const names = { damage: "Damage", maxHp: "Maximum HP", movement: "Movement", fireRate: "Firing Speed", cooldown: "Cooldown", dash: "Dash", range: "Projectile Range", critical: "Critical Damage", shield: "Temporary Shield", healing: "Healing" };
+      const extra = document.createElement("div");
+      extra.className = "endless-upgrade-list";
+      Object.keys(names).forEach(id => {
+        const level = endlessUpgradeLevel(id);
+        const cost = 20 * (level + 1);
+        const row = document.createElement("button");
+        row.type = "button";
+        row.className = "button button-secondary endless-upgrade-row";
+        row.disabled = level >= 10 || (save.currencies.chaser || 0) < cost;
+        row.textContent = `${names[id]} · LV ${level}/10 · ${level >= 10 ? "MAX" : `${cost} Chaser`}`;
+        row.addEventListener("click", () => {
+          if (save.currencies.chaser >= cost) {
+            save.currencies.chaser -= cost;
+            endlessSave.upgrades[id] = level + 1;
+            persist();
+            persistEndlessSave();
+            showEndlessUpgrades();
+          }
+        });
+        extra.append(row);
+      });
+      showOverlay("Endless Upgrades", `Chaser tokens: ${save.currencies.chaser || 0}. These upgrades affect Endless Mode only.`, [{ label: "Back", action: showEndlessMenu, secondary: true }], "SEPARATE PROGRESSION", extra);
+    }
     function mainMenu() {
       run.state = "idle";
       run.paused = false;
@@ -915,8 +1561,9 @@
       const buttons = [
         { label: "Play", action: () => {
           overlay.classList.add("fade-out");
-          window.setTimeout(() => startWave(save.continueWave, save.zone, save.currentHp <= 0), 280);
+          window.setTimeout(() => startWave(save.continueWave, save.zone, save.currentHp <= 0, true), 280);
         } },
+        { label: "Endless Mode", action: showEndlessMenu },
         { label: "How to Play", action: () => showHowToPlay(mainMenu) },
         { label: "Index", action: () => { window.location.href = "shop.html#enemy-index"; }, secondary: true },
         { label: "Upgrade Tree", action: () => { window.location.href = "shop.html#upgrade-tree"; }, secondary: true },
@@ -928,7 +1575,7 @@
         }, secondary: true },
         { label: "Credits", action: () => menuSection("Credits", "Music and sound effects: original synthesized tones created in your browser. Images and visual assets: original canvas-drawn shapes. External libraries and APIs: none. Audio uses the browser Web Audio API; progress uses local storage.", "MADE FOR THE BOX"), secondary: true }
       ];
-      if (testerMode) buttons.splice(2, 0, { label: "Tester Tools", action: () => showTesterTools(mainMenu), secondary: true });
+      if (testerMode) buttons.splice(2, 0, { label: "Admin Panel", action: openAdminPanel, secondary: true });
       showOverlay("Ready when you are.", `Zone ${run.zone}, wave ${save.continueWave} is next. Your current ${Math.ceil(save.currentHp)} HP carries forward.`, buttons, "A SMALL BOX. A BIG PROBLEM.");
     }
     function openShop() { window.location.href = "shop.html#upgrade-tree"; }
@@ -947,6 +1594,20 @@
       playTone(620, 0.2);
     }
     function skipWave() {
+      if (run.mode === "endless") {
+        if (!["active", "boss"].includes(run.state) || run.paused) return;
+        if (run.endlessSkipStreak >= 3) {
+          announce("Complete an Endless wave before skipping again");
+          return;
+        }
+        run.endlessSkipStreak++;
+        const nextWave = run.wave + 1;
+        save.currentHp = player.hp;
+        persist();
+        startEndlessWave(nextWave);
+        announce(`Endless wave ${nextWave - 1} skipped · ${run.endlessSkipStreak}/3`);
+        return;
+      }
       if (run.state !== "active" || run.wave >= 10 || run.paused) return;
       if (save.skipStreak >= 3) {
         announce("Clear a wave before skipping again");
@@ -967,18 +1628,40 @@
       announce(`Wave ${run.wave - 1} skipped · ${run.waveSpawns.length} waves overlapping · ${save.skipStreak}/3`);
     }
     function winBoss() {
+      if (run.mode === "endless") {
+        endlessSave.stats.bossesDefeated++;
+        endlessSave.stats.highestBoss = Math.max(endlessSave.stats.highestBoss, run.wave);
+        run._endlessBossDefeated = true;
+        run.boss = null;
+        run.bossLaser = null;
+        run.bossTell = null;
+        run.shots = [];
+        run.enemies = [];
+        save.currentHp = player.hp;
+        persist();
+        persistEndlessSave();
+        setStateLabel("BOSS DEFEATED");
+        playTone(880, 0.35, "triangle");
+        completeEndlessWave();
+        return;
+      }
       const clearedZone = run.zone;
       run.state = "victory";
       run.boss = null;
+      run.bossLaser = null;
+      run.bossTell = null;
       run.shots = [];
       run.enemies = [];
       save.currencies[`boss${clearedZone}`] += 25;
       save.currentHp = player.hp;
       save.skipStreak = 0;
       if (clearedZone < ZONES.length) {
-        save.unlockedZone = Math.max(save.unlockedZone, clearedZone + 1);
-        save.zone = clearedZone + 1;
+        const nextZone = clearedZone + 1;
+        save.unlockedZone = Math.max(save.unlockedZone, nextZone);
+        save.zone = nextZone;
         save.continueWave = 1;
+        run.zone = nextZone;
+        if (adminPanel) adminPanel.hidden = true;
       } else {
         save.continueWave = 1;
       }
@@ -987,8 +1670,8 @@
       setStateLabel("BOSS DEFEATED");
       playTone(880, 0.35, "triangle");
       if (clearedZone < ZONES.length) {
-        showOverlay("The boss hit itself.", `+25 Zone ${clearedZone} boss tokens. ${ZONES[clearedZone].name} is unlocked; your HP and upgrades are preserved.`, [
-          { label: "Enter next zone", action: () => startWave(1, clearedZone + 1) },
+        showOverlay("Boss hit itself.", `+25 Zone ${clearedZone} boss tokens. ${ZONES[clearedZone].name} is unlocked; your HP and upgrades are preserved.`, [
+          { label: "Enter next zone", action: () => startWave(1, run.zone) },
           { label: "Open upgrade tree", action: openShop, secondary: true },
           { label: "Continue automatically", action: () => { hideOverlay(); run.state = "transition"; run.transitionTimer = 3; }, secondary: true }
         ], "ZONE CLEAR");
@@ -1007,8 +1690,18 @@
       setMusicForWave(0);
       setStateLabel("RUN OVER");
       playTone(150, 0.35, "sawtooth");
+      if (run.mode === "endless") {
+        endlessSave.stats.highWave = Math.max(endlessSave.stats.highWave, run.wave);
+        persistEndlessSave();
+        showOverlay("Endless run ended.", `Highest wave reached: ${run.wave}. Bosses defeated: ${endlessSave.stats.bossesDefeated}. Survival time: ${Math.floor(endlessSave.stats.survivalTime)} seconds. Rewards earned: ${endlessSave.stats.rewardsEarned}.`, [
+          { label: "Restart Endless", action: () => startEndlessWave(1) },
+          { label: "Endless Menu", action: showEndlessMenu, secondary: true },
+          { label: "Main Menu", action: mainMenu, secondary: true }
+        ], "GAME OVER");
+        return;
+      }
       showOverlay("The box wins this round.", `You reached Zone ${run.zone}, wave ${run.wave}. Tokens, discoveries, and upgrades are safe.`, [
-        { label: "Retry wave", action: () => startWave(run.wave, run.zone, true) },
+        { label: "Retry wave", action: () => startWave(run.wave, run.zone, true, true) },
         { label: "Upgrade tree", action: openShop, secondary: true },
         { label: "Main menu", action: mainMenu, secondary: true }
       ], "TRY AGAIN");
@@ -1039,7 +1732,8 @@
         radius: options.radius || 5, color, bossShot: Boolean(options.bossShot),
         bounces: options.bounces || 0, bounced: 0, damage: options.damage || 1,
         bossDamage: options.bossDamage || 10, effect: options.effect || "",
-        age: 0, distance: 0, source: options.source || "enemy"
+        owner: options.owner || "enemy", slowDuration: options.slowDuration || 1.7,
+        poisonDuration: options.poisonDuration || 2.2, age: 0, distance: 0, source: options.source || "enemy"
       });
     }
     function spawnEnemy(id, mini = false) {
@@ -1052,17 +1746,45 @@
       if (side === 2) y = 780;
       if (side === 3) x = 20;
       const zone = currentZone();
-      const waveFactor = 1 + (run.wave - 1) * 0.025;
+      if (run.mode === "endless") {
+        endlessSave.stats.totalEnemiesEncountered++;
+        if (endlessSave.stats.totalEnemiesEncountered % 10 === 0) persistEndlessSave();
+      }
+      const slowEnemy = data.speed <= 2 || ["rock", "rollingRock"].includes(id);
+      const waveFactor = slowEnemy ? 1 : 1 + (run.wave - 1) * 0.1;
+      const movementScale = waveFactor * (data.attack === "Ranged" && !slowEnemy ? 1.5 : 1);
+      const speedLevels = mergedUpgradeLevel(id, "speed") + mergedUpgradeLevel(id, "pursuit");
+      const armorLevels = mergedUpgradeLevel(id, "armor") + mergedUpgradeLevel(id, "resilience") + mergedUpgradeLevel(id, "health");
+      const cooldownLevels = mergedUpgradeLevel(id, "cooldown") + mergedUpgradeLevel(id, "cooling") + mergedUpgradeLevel(id, "spin");
+      const damageLevels = mergedUpgradeLevel(id, "damage") + mergedUpgradeLevel(id, "impact") + mergedUpgradeLevel(id, "force") + mergedUpgradeLevel(id, "pulse") + mergedUpgradeLevel(id, "ambush");
+      const explosionLevels = mergedUpgradeLevel(id, "radius");
       const enemy = {
         id, x, y, vx: 0, vy: 0, age: 0, radius: mini ? 7 : data.size,
-        speed: data.speed * 16 * zone.speed * waveFactor,
-        health: mini ? 1 : Math.ceil(data.hp * zone.hp), maxHealth: mini ? 1 : Math.ceil(data.hp * zone.hp),
-        mini, rewardId: id, chargeIn: 1.2 + Math.random() * 1.1, charging: 0,
-        aim: 0, marked: null, fireIn: 1 + Math.random(), splitIn: 4.5,
+        speed: run.mode === "endless"
+          ? data.speed * 16 * (1 + Math.min(0.7, run.difficultyScaling ? (run.wave - 1) * 0.008 : 0)) * (1 + Math.min(0.18, speedLevels * 0.04))
+          : data.speed * 16 * zone.speed * movementScale * (1 + Math.min(0.18, speedLevels * 0.04)),
+        movementScale,
+        health: mini ? 1 : run.mode === "endless"
+          ? Math.ceil(data.hp * (run.difficultyScaling ? 1 + Math.floor((run.wave - 1) / 5) * 0.08 : 1) * (1 + Math.min(0.2, armorLevels * 0.06)))
+          : Math.ceil(data.hp * zone.hp * (1 + Math.min(0.2, armorLevels * 0.06))),
+        maxHealth: mini ? 1 : run.mode === "endless"
+          ? Math.ceil(data.hp * (run.difficultyScaling ? 1 + Math.floor((run.wave - 1) / 5) * 0.08 : 1) * (1 + Math.min(0.2, armorLevels * 0.06)))
+          : Math.ceil(data.hp * zone.hp * (1 + Math.min(0.2, armorLevels * 0.06))),
+        mini, rewardId: id, chargeIn: (1.2 + Math.random() * 1.1) * Math.max(0.7, 1 - cooldownLevels * 0.06), charging: 0,
+        aim: 0, marked: null, fireIn: (1 + Math.random()) * Math.max(0.7, 1 - cooldownLevels * 0.06), splitIn: 4.5,
         explode: 0, leaving: false, leaveTimer: 6.5 + Math.random() * 2.2,
         radialAngle: Math.random() * Math.PI * 2, color: data.color, telegraph: 0,
         shieldTime: 0, phantomTime: 0, pulseIn: 2.2, summonIn: 3.2, slowTimer: 0,
-        pulsePush: true, splitReady: !mini, merged: false
+        pulsePush: true, splitReady: !mini, merged: false,
+        attackDamage: data.damage * (1 + Math.min(0.35, damageLevels * 0.12)),
+        cooldownScale: Math.max(0.7, 1 - cooldownLevels * 0.06),
+        blastRadius: 96 + explosionLevels * 8,
+        damageReduction: Math.min(0.85, (data.reduction || 0) + mergedUpgradeLevel(id, "armor") * 0.025),
+        slowDuration: 1.7 + (mergedUpgradeLevel(id, "slow") + mergedUpgradeLevel(id, "duration")) * 0.25,
+        poisonDuration: 2.2 + mergedUpgradeLevel(id, "poison") * 0.25,
+        projectileRadius: 5 + mergedUpgradeLevel(id, "spread") * 0.6,
+        earthquakeIn: 4, shotsFired: 0, gravityPulseTime: 0, gravityPulseTick: 0,
+        splitGeneration: 0
       };
       if (data.pattern === "stot") enemy.stotTarget = { x: player.x, y: player.y };
       if (data.pattern === "merger") enemy.wanderTarget = { x: 55 + Math.random() * 690, y: 55 + Math.random() * 690 };
@@ -1082,12 +1804,13 @@
     }
     function startBoss() {
       const zone = currentZone();
-      const bossData = { id: `boss${zone.id}`, name: zone.boss, icon: "⬡", color: zone.color, zone: zone.id, hp: zone.bossHp, speed: 35 };
-      const boss = { x: 400, y: 230, radius: 43, hp: bossData.hp, maxHp: bossData.hp, color: bossData.color, age: 0 };
+      const bossData = { id: `boss${zone.id}`, name: zone.boss, icon: "⬡", color: zone.color, zone: zone.id, hp: zone.bossHp, speed: zone.id === 1 ? 45 : 35 };
+      const boss = { x: 400, y: 230, radius: 43, hp: bossData.hp, maxHp: bossData.hp, color: bossData.color, age: 0, speed: bossData.speed };
       run.boss = boss;
       run.state = "boss";
       run.bossAttack = 0.8;
       run.bossAttackStep = 0;
+      run.bossLaser = null;
       setMusicForWave(10);
       setStateLabel("BOSS FIGHT");
       discoverBoss(bossData);
@@ -1108,6 +1831,7 @@
     function escapeEnemy(enemy) {
       if (enemy.escaped) return;
       enemy.escaped = true;
+      if (run.mode === "endless") endlessSave.stats.enemiesExited++;
       rewardEnemy(enemy);
     }
     function beginLeaving(enemy) {
@@ -1120,7 +1844,7 @@
       ].sort((a, b) => Math.hypot(a.x - enemy.x, a.y - enemy.y) - Math.hypot(b.x - enemy.x, b.y - enemy.y))[0];
     }
     function damagePlayer(amount = 1) {
-      if (player.invulnerable > 0 || player.phaseTime > 0 || ["idle", "defeat", "victory"].includes(run.state)) return false;
+      if (player.adminInvincible || player.invulnerable > 0 || player.phaseTime > 0 || ["idle", "defeat", "victory"].includes(run.state)) return false;
       if (player.shieldHits > 0) {
         player.shieldHits -= 1;
         player.invulnerable = 0.7;
@@ -1198,12 +1922,21 @@
           const speed = Math.max(320, Math.hypot(shot.vx, shot.vy));
           shot.vx = dx / distance * speed;
           shot.vy = dy / distance * speed;
-          shot.bossShot = shot.bossShot && Boolean(run.boss);
+          shot.owner = "player";
+          shot.bossShot = false;
+          shot.damage = Math.max(6, shot.damage * 3);
           shot.bounces = Math.max(shot.bounces, 1);
           shot.bounced = 0;
         });
         announce("Nearby projectiles redirected");
         playTone(570, 0.14, "triangle");
+      } else if (action === "attack" && (run.boss || run.enemies.length) && player.attackCooldown <= 0) {
+        const target = run.boss || run.enemies.reduce((nearest, enemy) =>
+          !nearest || Math.hypot(enemy.x - player.x, enemy.y - player.y) < Math.hypot(nearest.x - player.x, nearest.y - player.y) ? enemy : nearest, null);
+        const endlessDamage = run.mode === "endless" ? 6 * (1 + endlessUpgradeLevel("damage") * 0.12) : 6;
+        fire(player.x, player.y, target.x, target.y, 560 + endlessUpgradeLevel("range") * 18, "#78f0c2", { owner: "player", damage: endlessDamage, radius: 7 });
+        player.attackCooldown = Math.max(0.12, 0.45 * (1 - endlessUpgradeLevel("fireRate") * 0.08));
+        playTone(520, 0.06, "triangle");
       } else if (action === "phaseShift" && upgradeLevel(action) && player.phaseCooldown <= 0) {
         player.phaseTime = 0.85 + (upgradeLevel("phaseShift") - 1) * 0.12;
         player.phaseCooldown = 5;
@@ -1214,7 +1947,8 @@
     }
     function updatePlayer(dt) {
       const accel = 1100;
-      const maxSpeed = 270 * (1 + upgradeLevel("movementSpeed") * 0.06) * testerSpeedMultiplier * (player.slowedTime > 0 ? 0.55 : 1);
+      const endlessMove = run.mode === "endless" ? 1 + endlessUpgradeLevel("movement") * 0.07 : 1;
+      const maxSpeed = 270 * (1 + upgradeLevel("movementSpeed") * 0.06) * endlessMove * (player.slowedTime > 0 ? 0.55 : 1);
       let dx = (held.has("arrowright") || held.has("d") ? 1 : 0) - (held.has("arrowleft") || held.has("a") ? 1 : 0);
       let dy = (held.has("arrowdown") || held.has("s") ? 1 : 0) - (held.has("arrowup") || held.has("w") ? 1 : 0);
       if (!dx && !dy && player.touchTarget) {
@@ -1278,6 +2012,7 @@
       player.deflectionCooldown = Math.max(0, player.deflectionCooldown - dt);
       player.phaseCooldown = Math.max(0, player.phaseCooldown - dt);
       player.slowCooldown = Math.max(0, player.slowCooldown - dt);
+      player.attackCooldown = Math.max(0, player.attackCooldown - dt);
       player.phaseTime = Math.max(0, player.phaseTime - dt);
       player.slowTime = Math.max(0, player.slowTime - dt);
       player.slowedTime = Math.max(0, player.slowedTime - dt);
@@ -1293,6 +2028,10 @@
         player.hp = Math.min(player.maxHp, player.hp + 0.15 * upgradeLevel("regeneration") * dt);
         save.currentHp = player.hp;
       }
+      if (run.mode === "endless" && (run.state === "active" || run.state === "boss") && endlessUpgradeLevel("healing") > 0) {
+        player.hp = Math.min(player.maxHp, player.hp + 0.08 * endlessUpgradeLevel("healing") * dt);
+        save.currentHp = player.hp;
+      }
     }
     function moveToward(enemy, tx, ty, speed, dt) {
       const dx = tx - enemy.x, dy = ty - enemy.y;
@@ -1301,7 +2040,14 @@
       enemy.vy += (dy / length * speed - enemy.vy) * Math.min(1, dt * 3.2);
     }
     function throwShot(enemy, effect = "", speed = 180, damage = 1) {
-      fire(enemy.x, enemy.y, player.x, player.y, speed, enemy.color, { damage, effect, radius: 5 });
+      enemy.shotsFired = (enemy.shotsFired || 0) + 1;
+      const absoluteZero = enemy.id === "slowShooter" && mergedUpgradeLevel(enemy.id, "absolute") > 0 && enemy.shotsFired % 4 === 0;
+      fire(enemy.x, enemy.y, player.x, player.y, speed, enemy.color, {
+        damage: enemy.attackDamage || damage, effect,
+        radius: enemy.projectileRadius || 5,
+        slowDuration: (enemy.slowDuration || 1.7) + (absoluteZero ? 1.2 : 0),
+        poisonDuration: enemy.poisonDuration
+      });
     }
     function splitEnemy(enemy) {
       if (!enemy.splitReady) return;
@@ -1309,7 +2055,9 @@
       const at = run.enemies.indexOf(enemy);
       if (at >= 0) run.enemies.splice(at, 1);
       for (let child = 0; child < 2; child++) {
-        const mini = { ...enemy, x: enemy.x + (child ? 15 : -15), y: enemy.y + (child ? 10 : -10), vx: child ? 55 : -55, vy: 35, age: 0, radius: 7, health: 1, maxHealth: 1, mini: true, leaveTimer: 5.5, splitReady: false, leaving: false, escaped: false, explode: 0, rewardId: "splitter", id: "splitter" };
+        const generation = (enemy.splitGeneration || 0) + 1;
+        const recursiveLevels = enemy.summonerPowered ? mergedUpgradeLevel("splitSummoner", "split") : 0;
+        const mini = { ...enemy, x: enemy.x + (child ? 15 : -15), y: enemy.y + (child ? 10 : -10), vx: child ? 55 : -55, vy: 35, age: 0, radius: 7, health: 1, maxHealth: 1, mini: true, leaveTimer: 5.5, splitReady: generation < recursiveLevels, splitGeneration: generation, summonerPowered: enemy.summonerPowered, leaving: false, escaped: false, explode: 0, rewardId: "splitter", id: "splitter" };
         run.enemies.push(mini);
       }
       announce("Splitter divided into two 1 HP children");
@@ -1317,8 +2065,9 @@
     function pulsePlayer(enemy, push) {
       const dx = player.x - enemy.x, dy = player.y - enemy.y;
       const distance = Math.hypot(dx, dy) || 1;
-      if (distance > 190) return;
-      const force = (push ? 1 : -1) * (1 - distance / 220) * 260;
+      const range = 190 + mergedUpgradeLevel(enemy.id, "range") * 12;
+      if (distance > range) return;
+      const force = (push ? 1 : -1) * (1 - distance / (range + 30)) * (260 + mergedUpgradeLevel(enemy.id, "force") * 20 + mergedUpgradeLevel(enemy.id, "pulse") * 20);
       player.vx += dx / distance * force;
       player.vy += dy / distance * force;
     }
@@ -1328,6 +2077,7 @@
       enemy.pulseIn -= dt;
       const data = ENEMY_BY_ID[enemy.id];
       const distance = Math.hypot(player.x - enemy.x, player.y - enemy.y);
+      const cooldown = value => value * (enemy.cooldownScale || 1);
       const slow = player.slowTime > 0 ? 0.42 : 1;
       const stotReadyToLeave = data.pattern === "stot" && enemy.stotArrived && enemy.age - enemy.stotArrivedAt > 0.55;
       if (!enemy.leaving && (enemy.age > enemy.leaveTimer || stotReadyToLeave)) beginLeaving(enemy);
@@ -1364,7 +2114,12 @@
           if (enemy.explode > 0) {
             enemy.explode -= dt;
             if (enemy.explode <= 0) {
-              if (distance < 105) damagePlayer(1);
+              if (distance < enemy.blastRadius + 9) damagePlayer(enemy.attackDamage);
+              if (mergedUpgradeLevel(enemy.id, "chain") > 0) {
+                run.enemies.filter(other => other !== enemy && other.id === enemy.id
+                  && Math.hypot(other.x - enemy.x, other.y - enemy.y) < enemy.blastRadius)
+                  .forEach(other => { other.explode = Math.max(other.explode, 0.45); });
+              }
               beginLeaving(enemy);
             }
           }
@@ -1384,6 +2139,16 @@
         const nextY = enemy.y + enemy.vy * dt * slow;
         if (nextX < 6 || nextX > 794) enemy.vx *= -1;
         if (nextY < 6 || nextY > 794) enemy.vy *= -1;
+        if (mergedUpgradeLevel(enemy.id, "quake") > 0) {
+          enemy.earthquakeIn -= dt;
+          if (enemy.earthquakeIn <= 0) {
+            if (distance < 145) {
+              damagePlayer(enemy.attackDamage);
+              pulsePlayer(enemy, true);
+            }
+            enemy.earthquakeIn = 5;
+          }
+        }
       } else if (["charge", "explosiveCharge"].includes(data.pattern)) {
         if (enemy.charging > 0) {
           enemy.x += enemy.vx * dt * slow;
@@ -1404,7 +2169,7 @@
           enemy.vx = dx / length * dashSpeed;
           enemy.vy = dy / length * dashSpeed;
           enemy.charging = dashDistance / dashSpeed;
-          enemy.chargeIn = 2.4;
+          enemy.chargeIn = cooldown(2.4);
         } else {
           enemy.chargeIn -= dt;
           moveToward(enemy, player.x, player.y, enemy.speed * 0.32, dt * slow);
@@ -1412,7 +2177,7 @@
         if (enemy.explode > 0) {
           enemy.explode -= dt;
           if (enemy.explode <= 0) {
-            if (Math.hypot(player.x - enemy.x, player.y - enemy.y) < 92) damagePlayer(1);
+            if (Math.hypot(player.x - enemy.x, player.y - enemy.y) < enemy.blastRadius) damagePlayer(enemy.attackDamage);
             beginLeaving(enemy);
           }
         }
@@ -1426,23 +2191,33 @@
           player.vy -= dy / length * 85 * dt;
         }
         if (enemy.fireIn <= 0) {
-          const count = data.pattern === "vortex" ? 10 : 8;
+          const count = data.pattern === "vortex" ? 10 : 8 + Math.min(4, mergedUpgradeLevel(enemy.id, "rotation"));
           for (let i = 0; i < count; i++) {
             const theta = enemy.radialAngle + Math.PI * 2 * i / count;
-            fire(enemy.x, enemy.y, enemy.x + Math.cos(theta) * 100, enemy.y + Math.sin(theta) * 100, 145, enemy.color, { radius: 4, effect: data.pattern === "toxicSpin" ? "poison" : "" });
+            fire(enemy.x, enemy.y, enemy.x + Math.cos(theta) * 100, enemy.y + Math.sin(theta) * 100, 145 + mergedUpgradeLevel(enemy.id, "spin") * 9, enemy.color, {
+              radius: enemy.projectileRadius, effect: data.pattern === "toxicSpin" ? "poison" : "",
+              damage: enemy.attackDamage, poisonDuration: enemy.poisonDuration
+            });
+          }
+          if (data.pattern === "toxicSpin" && mergedUpgradeLevel(enemy.id, "trail") > 0) {
+            run.hazards.push({ x: enemy.x, y: enemy.y, radius: 28, time: 3.2, tick: 0 });
           }
           enemy.radialAngle += 0.22;
-          enemy.fireIn = 2.8;
+          enemy.fireIn = cooldown(2.8);
         }
       } else if (["shoot", "stot", "freezer", "poison", "echo", "prism", "lattice", "snipe", "snipeSlow"].includes(data.pattern)) {
-        moveToward(enemy, player.x + Math.sign(enemy.x - player.x) * 120, player.y + Math.sign(enemy.y - player.y) * 120, Math.max(60, enemy.speed * 0.4), dt * slow);
+        moveToward(enemy, player.x + Math.sign(enemy.x - player.x) * 120, player.y + Math.sign(enemy.y - player.y) * 120, Math.max(60 * enemy.movementScale, enemy.speed * 0.4), dt * slow);
         if (data.pattern === "snipe" || data.pattern === "snipeSlow") {
           if (enemy.aim > 0) {
             enemy.aim -= dt;
             if (enemy.aim <= 0 && enemy.marked) {
-              fire(enemy.x, enemy.y, enemy.marked.x, enemy.marked.y, 430, enemy.color, { radius: 4, effect: data.pattern === "snipeSlow" ? "slow" : "" });
+              const shotSpeed = 430 * (1 + (mergedUpgradeLevel(enemy.id, "accuracy") + mergedUpgradeLevel(enemy.id, "range")) * 0.08);
+              fire(enemy.x, enemy.y, enemy.marked.x, enemy.marked.y, shotSpeed, enemy.color, { radius: enemy.projectileRadius, effect: data.pattern === "snipeSlow" ? "slow" : "", slowDuration: enemy.slowDuration, damage: enemy.attackDamage });
+              if (data.pattern === "snipeSlow" && mergedUpgradeLevel(enemy.id, "pierce") > 0) {
+                fire(enemy.x, enemy.y, enemy.marked.x + 22, enemy.marked.y, shotSpeed * 0.92, enemy.color, { radius: 4, effect: "slow", slowDuration: enemy.slowDuration, damage: enemy.attackDamage * 0.65 });
+              }
               enemy.marked = null;
-              enemy.fireIn = 2.7;
+              enemy.fireIn = cooldown(2.7);
             }
           } else if (enemy.fireIn <= 0) {
             enemy.aim = 0.9;
@@ -1462,7 +2237,7 @@
             const effect = ["freezer"].includes(data.pattern) ? "slow" : data.pattern === "poison" ? "poison" : "";
             throwShot(enemy, effect, data.pattern === "echo" ? 135 : data.pattern === "poison" ? 155 : 180);
           }
-          enemy.fireIn = data.pattern === "echo" ? 3 : 2.2;
+          enemy.fireIn = cooldown(data.pattern === "echo" ? 3 : 2.2);
         }
       } else if (["repulse", "magnet", "gravity", "mergeRepulse"].includes(data.pattern)) {
         if (data.pattern === "repulse" || data.pattern === "mergeRepulse") moveToward(enemy, player.x + Math.sign(enemy.x - player.x) * 135, player.y + Math.sign(enemy.y - player.y) * 135, enemy.speed * 0.7, dt * slow);
@@ -1480,17 +2255,31 @@
         if (enemy.pulseIn <= 0) {
           if (data.pattern === "gravity") enemy.pulsePush = !enemy.pulsePush;
           pulsePlayer(enemy, data.pattern === "repulse" || data.pattern === "mergeRepulse" || (data.pattern === "gravity" && enemy.pulsePush));
-          enemy.pulseIn = 2.7;
+          if (data.pattern === "gravity") {
+            enemy.gravityPulseTime = 0.45 + mergedUpgradeLevel(enemy.id, "duration") * 0.12;
+            enemy.gravityPulseTick = 0.12;
+          }
+          enemy.pulseIn = cooldown(2.7);
+        }
+        if (enemy.gravityPulseTime > 0) {
+          enemy.gravityPulseTime -= dt;
+          enemy.gravityPulseTick -= dt;
+          if (enemy.gravityPulseTick <= 0) {
+            pulsePlayer(enemy, enemy.pulsePush);
+            enemy.gravityPulseTick = 0.12;
+          }
         }
       } else if (["teleport", "phantomTeleport"].includes(data.pattern)) {
         enemy.telegraph = Math.max(0, enemy.telegraph - dt);
         if (enemy.fireIn <= 0) {
-          if (enemy.telegraph <= 0) enemy.telegraph = 0.7;
+          if (enemy.telegraph <= 0) enemy.telegraph = 0.7 + mergedUpgradeLevel(enemy.id, "fade") * 0.1;
           else if (enemy.telegraph < 0.2) {
-            enemy.x = 70 + Math.random() * 660;
-            enemy.y = 70 + Math.random() * 660;
+            const blinkRange = 350 + mergedUpgradeLevel(enemy.id, "teleport") * 50;
+            const angle = Math.random() * Math.PI * 2;
+            enemy.x = Math.max(70, Math.min(730, player.x + Math.cos(angle) * blinkRange));
+            enemy.y = Math.max(70, Math.min(730, player.y + Math.sin(angle) * blinkRange));
             enemy.telegraph = 0;
-            enemy.fireIn = 3;
+            enemy.fireIn = cooldown(3);
           }
         }
         if (data.pattern === "phantomTeleport" && enemy.telegraph <= 0 && enemy.age % 2.6 < 1.3) enemy.phantomTime = Math.max(0, enemy.phantomTime - dt);
@@ -1507,9 +2296,13 @@
             moveToward(enemy, target.x, target.y, enemy.speed, dt * slow);
           }
           run.enemies.forEach(other => {
-            if (other !== enemy && Math.hypot(other.x - enemy.x, other.y - enemy.y) < 125) {
-              if (data.pattern === "heal") other.health = Math.min(other.maxHealth, other.health + dt * 2);
-              else other.shieldTime = Math.max(other.shieldTime, 1.5);
+            const supportRange = 125 + mergedUpgradeLevel(enemy.id, "aura") * 8;
+            if (other !== enemy && Math.hypot(other.x - enemy.x, other.y - enemy.y) < supportRange) {
+              if (data.pattern === "heal") other.health = Math.min(other.maxHealth, other.health + dt * (2 + mergedUpgradeLevel(enemy.id, "healing") * 0.25));
+              else {
+                other.health = Math.min(other.maxHealth, other.health + dt * (0.6 + mergedUpgradeLevel(enemy.id, "healing") * 0.25));
+                other.shieldTime = Math.max(other.shieldTime, 1.5 + mergedUpgradeLevel(enemy.id, "shield") * 0.2);
+              }
             }
           });
         }
@@ -1522,9 +2315,16 @@
         enemy.shieldTime = Math.max(0, enemy.shieldTime - dt);
       } else if (data.pattern === "summon" || data.pattern === "summonSplit") {
         moveToward(enemy, player.x + Math.sign(enemy.x - player.x) * 140, player.y + Math.sign(enemy.y - player.y) * 140, enemy.speed * 0.5, dt * slow);
-        if (enemy.summonIn <= 0 && run.enemies.length < 14) {
+        if (enemy.summonIn <= 0 && run.enemies.length < 14 + Math.min(2, mergedUpgradeLevel(enemy.id, "summons"))) {
           spawnEnemy(data.pattern === "summonSplit" ? "splitter" : "supportling", true);
-          enemy.summonIn = 4;
+          const helper = run.enemies[run.enemies.length - 1];
+          if (data.pattern === "summonSplit") {
+            helper.health = helper.maxHealth = Math.min(3, 1 + mergedUpgradeLevel(enemy.id, "health"));
+            helper.splitReady = mergedUpgradeLevel(enemy.id, "split") > 0;
+            helper.splitGeneration = 0;
+            helper.summonerPowered = true;
+          }
+          enemy.summonIn = cooldown(4);
         } else enemy.summonIn -= dt;
       } else if (data.pattern === "mine") {
         if (enemy.pulseIn <= 0 && enemy.explode <= 0) enemy.explode = 0.8;
@@ -1564,7 +2364,7 @@
       }
       const invisible = data.pattern === "phantom" ? enemy.phantomTime > 1.25 : data.pattern === "phantomTeleport" && enemy.telegraph > 0;
       if (data.damage > 0 && !invisible && Math.hypot(player.x - enemy.x, player.y - enemy.y) < player.radius + enemy.radius) {
-        if (damagePlayer(data.damage) && data.pattern === "leech") enemy.health = Math.min(enemy.maxHealth, enemy.health + 2);
+        if (damagePlayer(enemy.attackDamage) && data.pattern === "leech") enemy.health = Math.min(enemy.maxHealth, enemy.health + 2);
       }
       if (enemy.x < -40 || enemy.x > 840 || enemy.y < -40 || enemy.y > 840) {
         escapeEnemy(enemy);
@@ -1573,6 +2373,7 @@
       }
     }
     function mergeAvailable(recipe) {
+      if (run.mode === "endless") return run.wave >= recipe.wave;
       return save.unlockedZone >= recipe.zone && run.zone >= recipe.zone && run.wave >= recipe.wave;
     }
     function fuseEnemies(first, second, recipe) {
@@ -1646,8 +2447,32 @@
       if (!run.boss) return;
       const boss = run.boss;
       boss.age += dt;
-      boss.x = 400 + Math.sin(boss.age * 0.28) * 125;
+      const targetX = 400 + Math.sin(boss.age * 0.28) * 125;
+      const targetY = 230 + Math.sin(boss.age * 0.19) * 55;
+      const movement = boss.speed * dt;
+      const xDistance = targetX - boss.x, yDistance = targetY - boss.y;
+      const distance = Math.hypot(xDistance, yDistance) || 1;
+      boss.x += xDistance / distance * Math.min(movement, Math.abs(xDistance));
+      boss.y += yDistance / distance * Math.min(movement, Math.abs(yDistance));
       run.bossAttack -= dt;
+      if (run.bossLaser) {
+        const laser = run.bossLaser;
+        if (laser.active) {
+          laser.time -= dt;
+          if (!laser.hit && distanceToSegment(player.x, player.y, laser.x1, laser.y1, laser.x2, laser.y2) < player.radius + 12) {
+            laser.hit = true;
+            damagePlayer(2);
+          }
+          if (laser.time <= 0) run.bossLaser = null;
+        } else {
+          laser.time -= dt;
+          if (laser.time <= 0) {
+            laser.active = true;
+            laser.time = 0.9;
+            laser.hit = false;
+          }
+        }
+      }
       if (run.bossTell) {
         run.bossTell.time -= dt;
         if (run.bossTell.time <= 0) {
@@ -1665,21 +2490,47 @@
             const point = run.bossTellTarget || { x: player.x, y: player.y };
             fire(boss.x, boss.y, point.x, point.y, 400, boss.color, { bossShot: true, bounces: 2, radius: 7, bossDamage: 12 });
             run.bossTellTarget = null;
+          } else if (attack === "laser") {
+            const point = run.bossTellTarget || { x: player.x, y: player.y };
+            const dx = point.x - boss.x, dy = point.y - boss.y;
+            const length = Math.hypot(dx, dy) || 1;
+            const reach = 1200;
+            run.bossLaser = {
+              x1: boss.x + dx / length * boss.radius,
+              y1: boss.y + dy / length * boss.radius,
+              x2: boss.x + dx / length * reach,
+              y2: boss.y + dy / length * reach,
+              time: 0.22, active: false, hit: false
+            };
+            run.bossTellTarget = null;
           } else {
-            const pool = waveCandidates(run.zone, Math.min(9, run.wave));
-            spawnEnemy(pool[0], true);
-            if (run.zone > 1) spawnEnemy(pool[Math.min(1, pool.length - 1)], true);
-            announce(`${currentZone().boss} summoned help`);
+            if (run.mode === "endless") {
+              const pool = endlessEnemyPool(run.wave);
+              spawnEnemy(pool[Math.floor(Math.random() * pool.length)].id, true);
+              if (run.wave >= 21) spawnEnemy(pool[Math.floor(Math.random() * pool.length)].id, true);
+              announce("Endless Guardian summoned reinforcements");
+            } else {
+              const pool = waveCandidates(run.zone, Math.min(9, run.wave));
+              spawnEnemy(pool[0], true);
+              if (run.zone > 1) spawnEnemy(pool[Math.min(1, pool.length - 1)], true);
+              announce(`${currentZone().boss} summoned help`);
+            }
           }
-          run.bossAttack = 2.5;
+          run.bossAttack = (attack === "laser" ? 4 : 2.8) * (run.boss.variant === "Rapid" ? 0.68 : 1);
         }
       } else if (run.bossAttack <= 0) {
-        const attacks = ["burst", "circle", "target", "summon"];
+        const attacks = ["burst", "circle", "target", "laser", "summon"];
         const type = attacks[run.bossAttackStep % attacks.length];
         run.bossAttackStep++;
-        run.bossTell = { type, time: type === "target" ? 1 : 0.85 };
-        if (type === "target") run.bossTellTarget = { x: player.x, y: player.y };
+        run.bossTell = { type, time: type === "laser" ? 1.2 : type === "target" ? 1 : 0.85 };
+        if (type === "target" || type === "laser") run.bossTellTarget = { x: player.x, y: player.y };
       }
+    }
+    function distanceToSegment(px, py, x1, y1, x2, y2) {
+      const dx = x2 - x1, dy = y2 - y1;
+      const lengthSquared = dx * dx + dy * dy || 1;
+      const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / lengthSquared));
+      return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
     }
     function updateShots(dt) {
       const slow = player.slowTime > 0 ? 0.55 : 1;
@@ -1691,18 +2542,38 @@
         shot.x += shot.vx * step;
         shot.y += shot.vy * step;
         shot.distance += Math.hypot(shot.x - oldX, shot.y - oldY);
-        if (shot.bossShot && run.boss && shot.bounced > 0 && Math.hypot(shot.x - run.boss.x, shot.y - run.boss.y) < run.boss.radius + shot.radius) {
-          const increase = 1 + upgradeLevel("reflectionPower") * 0.1;
-          run.boss.hp -= shot.bossDamage * increase;
+        if (shot.owner === "player" && run.boss && Math.hypot(shot.x - run.boss.x, shot.y - run.boss.y) < run.boss.radius + shot.radius) {
+          const endlessDamage = run.mode === "endless" ? 1 + endlessUpgradeLevel("damage") * 0.12 : 1;
+          const damageDealt = shot.damage * (1 + upgradeLevel("reflectionPower") * 0.1) * endlessDamage;
+          run.boss.hp -= damageDealt;
+          if (run.mode === "endless") {
+            endlessSave.stats.highestDamage = Math.max(endlessSave.stats.highestDamage, damageDealt);
+          }
           run.shots.splice(i, 1);
           playTone(290, 0.07);
           if (run.boss.hp <= 0) { run.boss.hp = 0; drawHud(); winBoss(); return; }
           continue;
         }
-        if (Math.hypot(shot.x - player.x, shot.y - player.y) < shot.radius + player.radius) {
+        if (shot.owner === "player") {
+          const targetIndex = run.enemies.findIndex(enemy => Math.hypot(shot.x - enemy.x, shot.y - enemy.y) < shot.radius + enemy.radius);
+          if (targetIndex >= 0) {
+            const target = run.enemies[targetIndex];
+            const reduction = Math.min(0.85, target.damageReduction || 0);
+            target.health -= shot.damage * (1 - reduction);
+            run.shots.splice(i, 1);
+            if (target.health <= 0) {
+              run.enemies.splice(targetIndex, 1);
+              if (run.mode === "endless") {
+                endlessSave.stats.enemiesDefeated++;
+              }
+            }
+            continue;
+          }
+        }
+        if (shot.owner !== "player" && Math.hypot(shot.x - player.x, shot.y - player.y) < shot.radius + player.radius) {
           const hit = damagePlayer(shot.damage);
-          if (hit && shot.effect === "slow") player.slowedTime = Math.max(player.slowedTime, 1.7);
-          if (hit && shot.effect === "poison") { player.poisonTime = Math.max(player.poisonTime, 2.2); player.poisonTick = Math.min(player.poisonTick || 1, 1); }
+          if (hit && shot.effect === "slow") player.slowedTime = Math.max(player.slowedTime, shot.slowDuration);
+          if (hit && shot.effect === "poison") { player.poisonTime = Math.max(player.poisonTime, shot.poisonDuration); player.poisonTick = Math.min(player.poisonTick || 1, 1); }
           run.shots.splice(i, 1);
           if (run.state === "defeat") return;
           continue;
@@ -1724,6 +2595,17 @@
         } else if (outside || shot.age > 7) run.shots.splice(i, 1);
       }
     }
+    function updateHazards(dt) {
+      run.hazards.forEach(hazard => {
+        hazard.time -= dt;
+        hazard.tick -= dt;
+        if (hazard.time > 0 && hazard.tick <= 0 && Math.hypot(player.x - hazard.x, player.y - hazard.y) < player.radius + hazard.radius) {
+          damagePlayer(1);
+          hazard.tick = 1;
+        }
+      });
+      run.hazards = run.hazards.filter(hazard => hazard.time > 0);
+    }
     function update(dt) {
       if (run.state === "idle" || run.state === "victory" || run.state === "defeat" || run.paused) return;
       if (run.toastTimer > 0) {
@@ -1733,7 +2615,8 @@
       if (run.state === "transition") {
         run.transitionTimer -= dt;
         if (run.transitionTimer <= 0) {
-          if (run.wave >= 10) startWave(1, run.zone);
+          if (run.mode === "endless") startEndlessWave(run.wave + 1);
+          else if (run.wave >= 10) startWave(1, run.zone);
           else startWave(run.wave + 1, run.zone);
         }
         return;
@@ -1742,22 +2625,30 @@
         run.countdown -= dt;
         setStateLabel(`START IN ${Math.max(1, Math.ceil(run.countdown))}`);
         if (run.countdown <= 0) {
-          if (run.wave === 10) startBoss();
+          if (run.mode === "endless") { run.state = "active"; setStateLabel("SURVIVE"); }
+          else if (run.wave === 10) startBoss();
           else { run.state = "active"; setStateLabel("SURVIVE"); }
         }
         drawHud();
         return;
       }
       updatePlayer(dt);
+      updateHazards(dt);
+      if (run.state === "defeat") return;
       run.clock += dt;
+      if (run.mode === "endless") endlessSave.stats.survivalTime += dt;
       if (run.state === "active") {
-        const enemyLimit = Math.min(60, 14 + run.waveSpawns.length * 8);
+        const enemyLimit = run.mode === "endless"
+          ? Math.floor(Math.min(45, (20 + run.wave * 0.35) * run.maxEnemiesScale))
+          : Math.min(60, 14 + run.waveSpawns.length * 8);
         run.waveSpawns.forEach(wave => {
           wave.spawnClock -= dt;
           if (wave.spawned < wave.total && wave.spawnClock <= 0 && run.enemies.length < enemyLimit) {
             spawnEnemy(wave.candidates[Math.floor(Math.random() * wave.candidates.length)]);
             wave.spawned++;
-            wave.spawnClock = Math.max(0.8, 1.9 - wave.wave * 0.065) * (0.82 + Math.random() * 0.36);
+            wave.spawnClock = run.mode === "endless"
+              ? Math.max(0.45, (1.15 - run.wave * 0.012) * run.spawnRateScale) * (0.82 + Math.random() * 0.36)
+              : Math.max(0.8, 1.9 - wave.wave * 0.065) * (0.82 + Math.random() * 0.36);
           }
         });
         run.waveSpawns = run.waveSpawns.filter(wave => wave.spawned < wave.total);
@@ -1765,15 +2656,22 @@
         if (run.state === "defeat") return;
         mergeEnemies();
         updateShots(dt);
-        if (run.waveSpawns.length === 0 && run.enemies.length === 0) completeWave();
+        if (run.mode === "endless") {
+          const spawner = run.waveSpawns[0];
+          if (spawner && spawner.spawned >= Math.ceil(spawner.total * 0.45) && !run.boss) startEndlessBoss();
+        } else if (run.waveSpawns.length === 0 && run.enemies.length === 0) completeWave();
       } else if (run.state === "boss") {
-        const enemyLimit = Math.min(60, 14 + run.waveSpawns.length * 8);
+        const enemyLimit = run.mode === "endless"
+          ? Math.floor(Math.min(45, (20 + run.wave * 0.35) * run.maxEnemiesScale))
+          : Math.min(60, 14 + run.waveSpawns.length * 8);
         run.waveSpawns.forEach(wave => {
           wave.spawnClock -= dt;
           if (wave.spawned < wave.total && wave.spawnClock <= 0 && run.enemies.length < enemyLimit) {
             spawnEnemy(wave.candidates[Math.floor(Math.random() * wave.candidates.length)]);
             wave.spawned++;
-            wave.spawnClock = Math.max(0.8, 1.9 - wave.wave * 0.065) * (0.82 + Math.random() * 0.36);
+            wave.spawnClock = run.mode === "endless"
+              ? Math.max(0.45, (1.15 - run.wave * 0.012) * run.spawnRateScale) * (0.82 + Math.random() * 0.36)
+              : Math.max(0.8, 1.9 - wave.wave * 0.065) * (0.82 + Math.random() * 0.36);
           }
         });
         run.waveSpawns = run.waveSpawns.filter(wave => wave.spawned < wave.total);
@@ -1801,19 +2699,38 @@
       ctx.strokeRect(4, 4, 792, 792);
       if (run.bossTell && run.boss) {
         const alpha = 0.5 + Math.sin(performance.now() / 65) * 0.25;
-        ctx.strokeStyle = `rgba(255, 80, 130, ${alpha})`;
-        ctx.lineWidth = 3;
+        ctx.strokeStyle = run.bossTell.type === "laser" ? `rgba(255, 54, 100, ${alpha + 0.25})` : `rgba(255, 80, 130, ${alpha})`;
+        ctx.lineWidth = run.bossTell.type === "laser" ? 5 : 3;
         ctx.beginPath();
-        if (run.bossTell.type === "target" && run.bossTellTarget) {
+        if (["target", "laser"].includes(run.bossTell.type) && run.bossTellTarget) {
           ctx.moveTo(run.boss.x, run.boss.y);
           ctx.lineTo(run.bossTellTarget.x, run.bossTellTarget.y);
+          if (run.bossTell.type === "laser") ctx.setLineDash([9, 8]);
         } else {
           ctx.arc(run.boss.x, run.boss.y, 62 + Math.sin(performance.now() / 70) * 5, 0, Math.PI * 2);
         }
         ctx.stroke();
+        ctx.setLineDash([]);
         ctx.fillStyle = "#ffb2c7";
         ctx.font = "14px Consolas, monospace";
         ctx.fillText(run.bossTell.type.toUpperCase(), run.boss.x - 30, run.boss.y - 62);
+      }
+      if (run.bossLaser) {
+        const laser = run.bossLaser;
+        ctx.beginPath(); ctx.moveTo(laser.x1, laser.y1); ctx.lineTo(laser.x2, laser.y2);
+        ctx.strokeStyle = laser.active ? "#ff254d" : "#ffd75e";
+        ctx.lineWidth = laser.active ? 18 : 8;
+        ctx.shadowColor = laser.active ? "#ff244f" : "#ffd75e";
+        ctx.shadowBlur = laser.active ? 24 : 12;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.beginPath(); ctx.moveTo(laser.x1, laser.y1); ctx.lineTo(laser.x2, laser.y2);
+        ctx.strokeStyle = "#fff4d6"; ctx.lineWidth = laser.active ? 4 : 2; ctx.stroke();
+      }
+      for (const hazard of run.hazards) {
+        ctx.beginPath(); ctx.arc(hazard.x, hazard.y, hazard.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(166, 230, 109, ${Math.min(0.18, hazard.time * 0.05)})`;
+        ctx.fill(); ctx.strokeStyle = "#a6e66d99"; ctx.lineWidth = 2; ctx.stroke();
       }
       for (const enemy of run.enemies) {
         const data = ENEMY_BY_ID[enemy.id];
@@ -1832,7 +2749,7 @@
           ctx.strokeStyle = "#ffad6777"; ctx.lineWidth = 2; ctx.setLineDash([4, 7]); ctx.stroke(); ctx.setLineDash([]);
         }
         if (enemy.explode > 0) {
-          const radius = data.pattern === "mine" ? 120 : data.pattern === "quake" ? 170 : 96;
+          const radius = data.pattern === "mine" ? 120 : data.pattern === "quake" ? 170 : enemy.blastRadius;
           ctx.beginPath(); ctx.arc(enemy.x, enemy.y, radius, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(255, 166, 75, ${0.08 + Math.sin(performance.now() / 55) * 0.035})`;
           ctx.fill(); ctx.strokeStyle = "#ffc667a0"; ctx.stroke();
@@ -1874,9 +2791,18 @@
     }
     function frame(time) {
       if (!lastFrame) lastFrame = time;
-      const dt = Math.min((time - lastFrame) / 1000, 0.04);
+      const baseDt = Math.min((time - lastFrame) / 1000, 0.04);
       lastFrame = time;
-      update(dt);
+      fpsFrames++;
+      fpsElapsed += baseDt;
+      if (fpsElapsed >= 0.5) {
+        currentFps = Math.round(fpsFrames / fpsElapsed);
+        fpsFrames = 0;
+        fpsElapsed = 0;
+      }
+      const substeps = Math.ceil(gameSpeedMultiplier);
+      for (let step = 0; step < substeps; step++) update(baseDt * gameSpeedMultiplier / substeps);
+      if (!adminPanel.hidden && testerMode) updateAdminStats();
       draw();
       animationId = requestAnimationFrame(frame);
     }
@@ -1885,14 +2811,6 @@
       const target = event.target;
       const typing = target instanceof HTMLElement
         && (["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName) || target.isContentEditable);
-      if (!typing && run.state === "idle" && !run.rebind && /^[a-z]$/.test(key)) {
-        testerCodeInput = (testerCodeInput + key).slice(-6);
-        if (testerCodeInput === "tester" && !testerMode) {
-          testerMode = true;
-          mainMenu();
-          announce("Tester mode enabled");
-        }
-      }
       if (run.rebind) {
         event.preventDefault();
         const duplicate = Object.keys(save.keybinds).find(id => id !== run.rebind.id && save.keybinds[id] === key);
@@ -1906,6 +2824,7 @@
         openKeybindSettings();
         return;
       }
+      if (typing) return;
       if (["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(key)) event.preventDefault();
       if (key === "escape" || key === save.keybinds.pause) {
         if (run.paused) resumeGame();
@@ -1930,6 +2849,7 @@
       ensureAudio();
       player.touchTarget = canvasPoint(event);
       canvas.setPointerCapture(event.pointerId);
+      if (run.boss) useAbility("attack");
     });
     canvas.addEventListener("pointermove", event => {
       if (player.touchTarget) player.touchTarget = canvasPoint(event);
@@ -2005,7 +2925,8 @@
 
     setMusicForWave(0);
     drawHud();
-    mainMenu();
+    if (new URLSearchParams(window.location.search).get("mode") === "endless") showEndlessMenu();
+    else mainMenu();
     animationId = requestAnimationFrame(frame);
     window.addEventListener("pagehide", () => {
       if (!skipPagehideSave && !["idle", "victory", "defeat"].includes(run.state)) {
